@@ -174,4 +174,31 @@ VALUES (5, 2, 100);
 INSERT INTO BANK_ACCOUNT(USR_ID, ACCOUNT_TYPE_ID, BALANCE)
 VALUES (5, 2, 100);
 
+-- logic to delete an account when empty --
+
+-- first empty an account --- 
+UPDATE BANK_ACCOUNT
+SET BALANCE = 0
+WHERE 
+    BANK_ACCOUNT_ID = 2; 
+/ 
+
+-- next delete ----
+DELETE FROM 
+    BANK_ACCOUNT 
+WHERE 
+    BANK_ACCOUNT_ID = 2; 
+/ 
+
+--- logic for deposits and withdrawals ----
+-- will write this in java 
+
+-- logic for superusers 
+SELECT B.BANK_ACCOUNT_ID, B.ACCOUNT_TYPE_ID, B.BALANCE, U.USR_ID, U.FIRSTNAME, U.LASTNAME, U.USERNAME, U.PASSWORD, U.USR_TYPE_ID
+FROM BANK_ACCOUNT B
+LEFT JOIN USR U
+ON 
+    U.USR_ID = B.USR_ID; 
+
+ 
 
