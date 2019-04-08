@@ -50,10 +50,26 @@ public class UserDAOImpl implements UserDAO{
 	}
 
 	@Override
-	public void createUser(User user) {
-		// TODO Auto-generated method stub
+	public void createUser (String firstName, String lastName, String userName, String password, int userTypeId) {
+		// try-with-resources... resources will be closed at the end of the block
+		// works for all AutoCloseable resources
+		try (Connection con = ConnectionUtil.getConnection()) {
+			// write a join to unify Bear, Cave, and BearType into one ResultSet
+			// map the ResultSet onto a list of Bear objects
+			String sql = "INSERT INTO USR(FIRSTNAME, LASTNAME, USERNAME, PASSWORD, USR_TYPE_ID) " 
+					+ "VALUES ('" +  firstName + "', '" + lastName + "', '" + userName + "', '" + password + "', '" + userTypeId + "')";
+				
+			Statement stmt = con.createStatement();
+			stmt.executeUpdate(sql);
+		
+			
+		} 
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
 	}
+	
 
 	@Override
 	public void updateUser(User user) {

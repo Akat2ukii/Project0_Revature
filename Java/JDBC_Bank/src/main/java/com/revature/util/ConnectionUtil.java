@@ -12,7 +12,7 @@ public class ConnectionUtil {
 	
 	// do not ever!!!! hardcode credentials like this
 	public static Connection getConnection() throws SQLException {
-
+		
 	}
 	
 	public static Connection getConnectionFromFile(String filename) throws SQLException, IOException {
@@ -21,5 +21,7 @@ public class ConnectionUtil {
 		prop.load(in);
 		return DriverManager.getConnection(prop.getProperty("url"), prop.getProperty("username"), prop.getProperty("pass"));
 	}
+	
+	
 
 }
