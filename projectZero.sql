@@ -38,6 +38,11 @@ ACCOUNT_TYPE_ID VARCHAR(100),
 BALANCE DOUBLE PRECISION 
 ); 
 /
+ALTER TABLE BANK_ACCOUNT
+MODIFY ( 
+    ACCOUNT_TYPE_ID VARCHAR2(100)
+);
+/ 
 
 CREATE TABLE ACCOUNT_TYPE ( 
 ACCOUNT_TYPE_ID VARCHAR2(100) PRIMARY KEY, 
@@ -86,14 +91,26 @@ ALTER TABLE ACTIVITY
 ADD CONSTRAINT FK_ACTIVITY_ACTIVITY_TYPE
 FOREIGN KEY(ACTIVITY_TYPE_ID) REFERENCES ACTIVITY_TYPE(ACTIVITY_TYPE_ID);
 
---- Put someone in some date for testing 
+-- * * * Put someone in some date for testing * * * 
+
 INSERT INTO USR_TYPE VALUES (1, 'standard'); 
 INSERT INTO USR_TYPE VALUES (2, 'super');
+
 INSERT INTO ACCOUNT_TYPE VALUES (1, 'checking'); 
 INSERT INTO ACCOUNT_TYPE VALUES (2, 'savings');
-INSERT INTO USR VALUES (1, 'Bob', 'Jones', 'BJones','p@ssword',1); 
-INSERT INTO BANK_ACCOUNT VALUES (1, 1, 1, 10); 
 
+INSERT INTO USR VALUES (1, 'Bob', 'Jones', 'BJones','p@ssword',1); 
+INSERT INTO USR VALUES (2, 'Tim', 'Jones', 'TJones','p*ssword',1); 
+INSERT INTO USR VALUES (3, 'Steve', 'Smith', 'SSmith','p#ssword',1);
+INSERT INTO USR VALUES (4, 'Jane', 'Johnson', 'JJohnson','p$ssword',2);
+
+INSERT INTO BANK_ACCOUNT VALUES (1, 1, 1, 10); 
+INSERT INTO BANK_ACCOUNT VALUES (2, 2, 1, 25); 
+INSERT INTO BANK_ACCOUNT VALUES (3, 3, 2, 50); 
+INSERT INTO BANK_ACCOUNT VALUES (4, 4, 1, 75); 
+
+-- Logic for returning bank account details for a user when username and password are entered. 
+/*
 CREATE OR REPLACE PROCEDURE USR_VIEW_ACCOUNT(UNAME IN VARCHAR2(100), PWORD IN VARCHAR2(100), S OUT SYS_REFCURSOR) IS
 BEGIN 
     SELECT B.BANK_ACCOUNT_ID, B.USR_ID, B.ACCOUNT_TYPE_ID, B.BALANCE
@@ -104,20 +121,153 @@ BEGIN
     WHERE 
         (USR.USERNAME='BJones') AND (USR.PASSWORD='p@ssword'); 
 END; 
-
-
-
-/*
-    SELECT B.BANK_ACCOUNT_ID, B.USR_ID, B.ACCOUNT_TYPE_ID, B.BALANCE
-    FROM BANK_ACCOUNT B
-    INNER JOIN USR 
-    ON 
-        USR.USR_ID = B.USR_ID
-    WHERE 
-        (USR.USERNAME='BJones') AND (USR.PASSWORD='p@ssword'); 
 */
-        
-      
+SELECT B.BANK_ACCOUNT_ID, B.USR_ID, B.ACCOUNT_TYPE_ID, B.BALANCE
+FROM BANK_ACCOUNT B
+INNER JOIN USR 
+ON 
+    USR.USR_ID = B.USR_ID
+WHERE 
+(USR.USERNAME='BJones') AND (USR.PASSWORD='p@ssword'); 
+
+-- Logic for sequence and triggers ---
+
+--sequnece and trigger for usr 
+CREATE SEQUENCE SQ_USR_PK
+START WITH 5
+INCREMENT BY 1; 
+/ 
+
+CREATE OR REPLACE TRIGGER TR_INSERT_USR
+BEFORE INSERT ON USR 
+FOR EACH ROW 
+BEGIN 
+    SELECT SQ_USR_PK.NEXTVAL INTO: NEW.USR_ID FROM  DUAL; 
+END; 
+/ 
+
+-- Test for sequence and trigger for usrs ---
+INSERT INTO USR(FIRSTNAME,LASTNAME, USERNAME, PASSWORD, USR_TYPE_ID)
+VALUES ('Janet', 'Johnson', 'JanJohnson','p%ssword',2);
+/ 
+
+--sequence and trigger for bank account  
+CREATE SEQUENCE SQ_BANK_ACCOUNT_PK
+START WITH 5
+INCREMENT BY 1; 
+/ 
+
+CREATE OR REPLACE TRIGGER TR_INSERT_BANK_ACCOUNT
+BEFORE INSERT ON BANK_ACCOUNT
+FOR EACH ROW 
+BEGIN 
+    SELECT SQ_BANK_ACCOUNT_PK.NEXTVAL INTO: NEW.BANK_ACCOUNT_ID FROM  DUAL; 
+END; 
+/ 
+
+ --test sequence and trigger for bank accounts 
+INSERT INTO BANK_ACCOUNT(USR_ID, ACCOUNT_TYPE_ID, BALANCE)
+VALUES (5, 2, 100);
+/ 
+ 
+ 
+ 
+ -- logic for a user to create an account --- 
+ 
+INSERT INTO BANK_ACCOUNT(USR_ID, ACCOUNT_TYPE_ID, BALANCE)
+VALUES (5, 2, 100);
+
+
+
+-- logic for a user to delete an account if it is empty --
+-- NOTE, there are not checks here to see if the account is empty. This is simply the logic to delete. 
+
+-- first empty an account --- 
+UPDATE BANK_ACCOUNT
+SET BALANCE = 0
+WHERE 
+    BANK_ACCOUNT_ID = 2; 
+/ 
+
+-- next delete ----
+DELETE FROM 
+    BANK_ACCOUNT 
+WHERE 
+    BANK_ACCOUNT_ID = 2; 
+/ 
+
+
+
+--- logic for deposits and withdrawals ----
+-- * * * will write this in java * * *  
+
+
+
+-- logic for superusers 
+
+-- view all acounts 
+
+SELECT B.BANK_ACCOUNT_ID, B.ACCOUNT_TYPE_ID, B.BALANCE, U.USR_ID, U.FIRSTNAME, U.LASTNAME, U.USERNAME, U.PASSWORD, U.USR_TYPE_ID
+FROM BANK_ACCOUNT B
+LEFT JOIN USR U
+ON 
+    U.USR_ID = B.USR_ID; 
+
+
+-- logic for acitvity table 
+
+-- sequence
+CREATE SEQUENCE SQ_ACTIVITY_PK
+START WITH 1
+INCREMENT BY 1; 
+/ 
+
+-- trigger
+
+CREATE OR REPLACE TRIGGER TR_UPDATE_BANK_ACCOUNT
+AFTER UPDATE ON BANK_ACCOUNT
+FOR EACH ROW 
+BEGIN 
+    INSERT INTO ACTIVITY(ACTIVITY_ID, TX_DATE)
+    VALUES (SQ_ACTIVITY_PK.NEXTVAL, CURRENT_DATE); 
+    
+    --SELECT SQ_ACTIVITY_PK.NEXTVAL INTO: NEW.ACTIVITY_ID FROM  DUAL; 
+    --SELECT BANK_ACCOUNT.BALANCE INTO 
+    -- from Java, we need some code here 
+END; 
+/ 
+/*
+CREATE TABLE ACTIVITY ( 
+ACTIVITY_ID INTEGER PRIMARY KEY, 
+BANK_ACCOUNT_ID INTEGER,
+ACTIVITY_TYPE_ID INTEGER, 
+TX_DATE DATE,
+TX_DESCRIPTION VARCHAR2(100)
+); 
+/
+*/ 
+
+ALTER TABLE ACTIVITY 
+MODIFY BANK_ACCOUNT_ID NOT NULL; 
+
+ALTER TABLE ACTIVITY 
+DROP CONSTRAINT BANK_ACCOUNT_ID; 
+
+ALTER TABLE ACTIVITY MODIFY (BANK_ACCOUNT_ID NULL);
+
+-- test for incrementing statement records 
+UPDATE BANK_ACCOUNT 
+SET BALANCE = 25
+WHERE USR_ID = 1; 
+/ 
+
+
+
+INSERT INTO ACTIVITY_TYPE
+VALUES(1, 'credit'); 
+
+INSERT INTO ACTIVITY_TYPE
+VALUES(2, 'debit'); 
 
 
 

@@ -11,10 +11,11 @@ import java.util.Properties;
 public class ConnectionUtil {
 	
 	// do not ever!!!! hardcode credentials like this
+	
 	public static Connection getConnection() throws SQLException {
 
-
 	}
+	
 	
 	public static Connection getConnectionFromFile(String filename) throws SQLException, IOException {
 		Properties prop = new Properties();
