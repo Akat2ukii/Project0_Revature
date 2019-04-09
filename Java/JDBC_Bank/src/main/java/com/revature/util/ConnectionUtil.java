@@ -12,8 +12,7 @@ public class ConnectionUtil {
 	
 	// do not ever!!!! hardcode credentials like this
 	
-	public static Connection getConnection() throws SQLException {
-
+	
 	}
 	
 	

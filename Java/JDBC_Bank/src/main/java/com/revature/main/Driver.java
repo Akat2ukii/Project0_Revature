@@ -47,7 +47,7 @@ public class Driver {
 				 	Scanner choice2 = new Scanner(System.in);
 				 	System.out.println("Would you like to create ?");
 				 	*/
-				 		//choice3 -- option to exit or proceed to the registerd users portal
+				 		//choice3 -- option to exit or proceed to the registered users portal
 				 		//
 				 		// 
 				 
