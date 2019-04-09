@@ -91,7 +91,8 @@ ALTER TABLE ACTIVITY
 ADD CONSTRAINT FK_ACTIVITY_ACTIVITY_TYPE
 FOREIGN KEY(ACTIVITY_TYPE_ID) REFERENCES ACTIVITY_TYPE(ACTIVITY_TYPE_ID);
 
---- Put someone in some date for testing 
+-- * * * Put someone in some date for testing * * * 
+
 INSERT INTO USR_TYPE VALUES (1, 'standard'); 
 INSERT INTO USR_TYPE VALUES (2, 'super');
 
@@ -169,12 +170,17 @@ INSERT INTO BANK_ACCOUNT(USR_ID, ACCOUNT_TYPE_ID, BALANCE)
 VALUES (5, 2, 100);
 / 
  
- -- logic for creating an account --- 
+ 
+ 
+ -- logic for a user to create an account --- 
  
 INSERT INTO BANK_ACCOUNT(USR_ID, ACCOUNT_TYPE_ID, BALANCE)
 VALUES (5, 2, 100);
 
--- logic to delete an account when empty --
+
+
+-- logic for a user to delete an account if it is empty --
+-- NOTE, there are not checks here to see if the account is empty. This is simply the logic to delete. 
 
 -- first empty an account --- 
 UPDATE BANK_ACCOUNT
@@ -190,15 +196,78 @@ WHERE
     BANK_ACCOUNT_ID = 2; 
 / 
 
+
+
 --- logic for deposits and withdrawals ----
--- will write this in java 
+-- * * * will write this in java * * *  
+
+
 
 -- logic for superusers 
+
 -- view all acounts 
+
 SELECT B.BANK_ACCOUNT_ID, B.ACCOUNT_TYPE_ID, B.BALANCE, U.USR_ID, U.FIRSTNAME, U.LASTNAME, U.USERNAME, U.PASSWORD, U.USR_TYPE_ID
 FROM BANK_ACCOUNT B
 LEFT JOIN USR U
 ON 
-    U.USR_ID = B.USR_ID
-LEFT JOIN ACCOUNT_TYPE A; 
+    U.USR_ID = B.USR_ID; 
+
+
+-- logic for acitvity table 
+
+-- sequence
+CREATE SEQUENCE SQ_ACTIVITY_PK
+START WITH 1
+INCREMENT BY 1; 
+/ 
+
+-- trigger
+
+CREATE OR REPLACE TRIGGER TR_UPDATE_BANK_ACCOUNT
+AFTER UPDATE ON BANK_ACCOUNT
+FOR EACH ROW 
+BEGIN 
+    INSERT INTO ACTIVITY(ACTIVITY_ID, TX_DATE)
+    VALUES (SQ_ACTIVITY_PK.NEXTVAL, CURRENT_DATE); 
+    
+    --SELECT SQ_ACTIVITY_PK.NEXTVAL INTO: NEW.ACTIVITY_ID FROM  DUAL; 
+    --SELECT BANK_ACCOUNT.BALANCE INTO 
+    -- from Java, we need some code here 
+END; 
+/ 
+/*
+CREATE TABLE ACTIVITY ( 
+ACTIVITY_ID INTEGER PRIMARY KEY, 
+BANK_ACCOUNT_ID INTEGER,
+ACTIVITY_TYPE_ID INTEGER, 
+TX_DATE DATE,
+TX_DESCRIPTION VARCHAR2(100)
+); 
+/
+*/ 
+
+ALTER TABLE ACTIVITY 
+MODIFY BANK_ACCOUNT_ID NOT NULL; 
+
+ALTER TABLE ACTIVITY 
+DROP CONSTRAINT BANK_ACCOUNT_ID; 
+
+ALTER TABLE ACTIVITY MODIFY (BANK_ACCOUNT_ID NULL);
+
+-- test for incrementing statement records 
+UPDATE BANK_ACCOUNT 
+SET BALANCE = 25
+WHERE USR_ID = 1; 
+/ 
+
+
+
+INSERT INTO ACTIVITY_TYPE
+VALUES(1, 'credit'); 
+
+INSERT INTO ACTIVITY_TYPE
+VALUES(2, 'debit'); 
+
+
 

@@ -36,7 +36,7 @@ public class AccountType {
 		this.name = name;
 	}
 
-
+	
 	@Override
 	public String toString() {
 		return "AccountType [id=" + id + ", name=" + name + "]";
