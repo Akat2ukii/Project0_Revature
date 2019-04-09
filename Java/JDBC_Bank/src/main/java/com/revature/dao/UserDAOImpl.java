@@ -2,6 +2,7 @@ package com.revature.dao;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -57,10 +58,15 @@ public class UserDAOImpl implements UserDAO{
 			// write a join to unify Bear, Cave, and BearType into one ResultSet
 			// map the ResultSet onto a list of Bear objects
 			String sql = "INSERT INTO USR(FIRSTNAME, LASTNAME, USERNAME, PASSWORD, USR_TYPE_ID) " 
-					+ "VALUES ('" +  firstName + "', '" + lastName + "', '" + userName + "', '" + password + "', '" + userTypeId + "')";
+					+ "VALUES (?,?,?,?,?)";
 				
-			Statement stmt = con.createStatement();
-			stmt.executeUpdate(sql);
+			PreparedStatement pstmt = con.prepareStatement(sql);
+			pstmt.setString(1, firstName);
+			pstmt.setString(2, lastName);
+			pstmt.setString(3, userName);
+			pstmt.setString(4, password);
+			pstmt.setInt(5, userTypeId);
+			pstmt.executeUpdate();
 		
 			
 		} 
