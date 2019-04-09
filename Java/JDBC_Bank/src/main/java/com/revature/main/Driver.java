@@ -1,14 +1,13 @@
 package com.revature.main;
 
 import java.io.IOException;
+import com.revature.beans.*;
 import java.sql.*;
 import java.util.*;
 
 import com.revature.beans.User;
 import com.revature.dao.*;
 import com.revature.util.ConnectionUtil;
-
-import java.util.Scanner;
 
 
 
@@ -47,7 +46,34 @@ public class Driver {
 				 	System.out.println("Would you like to create an account?");
 				 	String choosing2 = choice2.nextLine();
 				 	if (choosing2.contentEquals("yes")) {
-				 		ud.getUserByUserNamePassword(name1, name2);
+				 		List<User> myList = ud.getUserByUserNamePassword(name3, passing);
+				 		User thisList = myList.get(0);
+				 		int myid = thisList.getId();
+				 		Scanner accountMake1 = new Scanner(System.in);
+					 	System.out.println("Would you like a checking or savings account?");
+					 	String accountMake1C = accountMake1.nextLine();
+					 	int aType = 0;
+					 	if (accountMake1C.contentEquals("checkings")) {
+					 		aType = 1;
+					 	}
+					 	else if(accountMake1C.contentEquals("savings")) {
+					 		aType = 2;
+					 	}
+					 	else {
+					 		System.out.println("Please type out 'savings' or 'checking'");
+					 	}
+					 	Scanner accountMake2 = new Scanner(System.in);
+					 	System.out.println("How much would you like to deposit?");
+					 	String balanceS = accountMake2.nextLine();
+					 	int balance = Integer.parseInt(balanceS);
+					 	BankAccountDAO bad = new BankAccountDAOImpl();
+					 	bad.createBAccount(myid, aType, balance);
+					 	
+					 	
+					 	
+					 		
+				 		
+				 		
 				 	}
 				 	else {
 				 		System.out.println("derpderpderpderpderpderp");

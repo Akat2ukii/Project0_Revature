@@ -54,7 +54,7 @@ public class UserDAOImpl implements UserDAO{
 			// write a join to unify Bear, Cave, and BearType into one ResultSet
 			// map the ResultSet onto a list of Bear objects
 			String sql = "SELECT U.USR_ID, U.FIRSTNAME, U.LASTNAME, U.USERNAME, U.PASSWORD, U.USR_TYPE_ID "
-					+ "FROM USR U WHERE U.FIRSTNAME = ? AND U.LASTNAME = ?";
+					+ "FROM USR U WHERE U.USERNAME = ? AND U.PASSWORD = ?";
 				
 			PreparedStatement stmtGet = con.prepareStatement(sql);
 			stmtGet.setString(1, userName);
