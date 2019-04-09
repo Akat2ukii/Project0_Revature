@@ -83,4 +83,10 @@ public class UserDAOImpl implements UserDAO{
 		
 	}
 
+	@Override
+	public Account getAccountById(int id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

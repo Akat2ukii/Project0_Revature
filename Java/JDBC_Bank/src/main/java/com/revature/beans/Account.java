@@ -2,12 +2,26 @@ package com.revature.beans;
 
 public class Account {
 	
-	//bean instance variables 
+	//instance variables 
 	private int bankAccountId; 
 	private int userId; 
 	private String accountTypeId; 
 	private double balance;
 	
+	
+	//constructors 
+	public Account() {
+		super();
+	}
+	public Account(int bankAccountId, int userId, String accountTypeId, double balance) {
+		super();
+		this.bankAccountId = bankAccountId;
+		this.userId = userId;
+		this.accountTypeId = accountTypeId;
+		this.balance = balance;
+	}
+
+
 	//getters and setters 
 	public int getBankAccountId() {
 		return bankAccountId;
