@@ -42,11 +42,17 @@ public class Driver {
 				 UserDAO ud = new UserDAOImpl();
 				 ud.createUser(name1, name2, name3, passing, 1);
 				 
-				 	//choice2 - option to open an account for the newly registered
-				 	/*
+				 	
 				 	Scanner choice2 = new Scanner(System.in);
-				 	System.out.println("Would you like to create ?");
-				 	*/
+				 	System.out.println("Would you like to create an account?");
+				 	String choosing2 = choice2.nextLine();
+				 	if (choosing2.contentEquals("yes")) {
+				 		ud.getUserByUserNamePassword(name1, name2);
+				 	}
+				 	else {
+				 		System.out.println("derpderpderpderpderpderp");
+				 	}
+				 			 
 				 		//choice3 -- option to exit or proceed to the registered users portal
 				 		//
 				 		// 
@@ -64,7 +70,7 @@ public class Driver {
 		 else {
 			 //choices for registered users 
 			 Scanner choiceR1 = new Scanner(System.in);
-			 System.out.println("\nPlease enter one of the following:\n'v' to view your accounts,\n'c' to create a new account,\n'd' to delete an empty account, or\n'f' to depsit or withdraw funds.");
+			 System.out.println("\nPlease enter one of the following:\n'v' to view your accounts,\n'c' to create a new account,\n'd' to delete an empty account, or\n'f' to deposit or withdraw funds.");
 			 String choosingR1 = choiceR1.nextLine();
 			 // . . . more code here. . . 
 		 }

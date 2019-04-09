@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.revature.beans.*;
@@ -45,9 +46,39 @@ public class UserDAOImpl implements UserDAO{
 	}
 
 	@Override
-	public User getUserById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<User> getUserByUserNamePassword(String userName, String password) {
+		List<User> ul = new ArrayList<>();
+		// try-with-resources... resources will be closed at the end of the block
+		// works for all AutoCloseable resources
+		try (Connection con = ConnectionUtil.getConnection()) {
+			// write a join to unify Bear, Cave, and BearType into one ResultSet
+			// map the ResultSet onto a list of Bear objects
+			String sql = "SELECT U.USR_ID, U.FIRSTNAME, U.LASTNAME, U.USERNAME, U.PASSWORD, U.USR_TYPE_ID "
+					+ "FROM USR U WHERE U.FIRSTNAME = ? AND U.LASTNAME = ?";
+				
+			PreparedStatement stmtGet = con.prepareStatement(sql);
+			stmtGet.setString(1, userName);
+			stmtGet.setString(2, password);
+			ResultSet rs = stmtGet.executeQuery();
+			while (rs.next()) {
+				int userId = rs.getInt("USR_ID");
+				String firstName = rs.getString("FIRSTNAME");
+				String lastName = rs.getString("LASTNAME");
+				String username = rs.getString("USERNAME");
+				String password1 = rs.getString("PASSWORD");
+				int userTypeId = rs.getInt("USR_TYPE_ID");
+				
+				ul.add(new User(userId, firstName, lastName, username, password1, userTypeId));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		for (int i = 0; i < ul.size(); i++) {
+			System.out.println(ul.get(i));
+		}
+		System.out.println("YESSSSS");
+		return ul;
 	}
 
 	@Override
@@ -87,12 +118,6 @@ public class UserDAOImpl implements UserDAO{
 	public void deleteUser(User user) {
 		// TODO Auto-generated method stub
 		
-	}
-
-	@Override
-	public Account getAccountById(int id) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }
