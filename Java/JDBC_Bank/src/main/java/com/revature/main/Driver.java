@@ -67,10 +67,16 @@ public class Driver {
 		 System.out.println("Username is: " + choosing);
 		 } 
 		 // end of block for non-users registering
-		 else {
+		 else  if (choosing0.contentEquals("yes")) {
 			 //choices for registered users 
 			 Scanner choiceR1 = new Scanner(System.in);
 			 System.out.println("\nPlease enter one of the following:\n'v' to view your accounts,\n'c' to create a new account,\n'd' to delete an empty account, or\n'f' to deposit or withdraw funds.");
+			 String choosingR1 = choiceR1.nextLine();
+			 // . . . more code here. . . 
+		 } else if (choosing0.contentEquals("super")) {
+			 //choices for super users 
+			 Scanner choiceR1 = new Scanner(System.in);
+			 System.out.println("\nPlease enter one of the following:\n'v' to view all accounts,\n'c' to create a new account,\n'd' to delete all user accounts, or\n'u' to update an account.");
 			 String choosingR1 = choiceR1.nextLine();
 			 // . . . more code here. . . 
 		 }
