@@ -1,8 +1,12 @@
 package com.revature.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 import com.revature.beans.User;
+import com.revature.util.ConnectionUtil;
 
 public class BankAccountDAOImpl implements BankAccountDAO {
 
@@ -19,8 +23,26 @@ public class BankAccountDAOImpl implements BankAccountDAO {
 	}
 
 	@Override
-	public void createBAccount(String firstName, String lastName, String userName, String password, int userTypeId) {
-		// TODO Auto-generated method stub
+	public void createBAccount(int UserId, int accountTypeID, double balance) {
+		// try-with-resources... resources will be closed at the end of the block
+		// works for all AutoCloseable resources
+		try (Connection con = ConnectionUtil.getConnection()) {
+			// write a join to unify Bear, Cave, and BearType into one ResultSet
+			// map the ResultSet onto a list of Bear objects
+			String sql = "INSERT INTO BANK_ACCOUNT(USR_ID, ACCOUNT_TYPE_ID, BALANCE) " 
+						 + "VALUES (?, ?, ?)";
+				
+			PreparedStatement pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, UserId);
+			pstmt.setInt(2, accountTypeID);
+			pstmt.setDouble(3, balance);
+			pstmt.executeUpdate();
+		
+			
+		} 
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
 	}
 
