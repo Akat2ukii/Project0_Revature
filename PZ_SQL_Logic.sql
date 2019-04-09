@@ -25,7 +25,7 @@ SP_USR_VIEW_ACCOUNT('BJones', 'p@ssword', S);
 LOOP
 FETCH S INTO ACC_ID, USR_ID, ACC_TYPE, BAL; 
 EXIT WHEN S%NOTFOUND; 
-DBMS_OUTPUT.PUT_LINE('Account ID: '||ACC_ID||' User ID: '||USR_ID||' Account Type: '||ACC_TYPE||' Balance '||BAL); 
+DBMS_OUTPUT.PUT_LINE('Account ID: '||ACC_ID||' User ID: '||USR_ID||' Account Type: '||ACC_TYPE||' Balance: '||BAL); 
 END LOOP; 
 CLOSE S; 
 END; 
