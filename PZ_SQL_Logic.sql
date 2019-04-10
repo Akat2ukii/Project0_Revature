@@ -30,6 +30,11 @@ END LOOP;
 CLOSE S; 
 END; 
 
+-- pull bank acccount balance by user id --  
+SELECT BALANCE 
+FROM BANK_ACCOUNT 
+WHERE USR_ID = 2; 
+
 
 --This logic works
 SELECT B.BANK_ACCOUNT_ID, B.USR_ID, B.ACCOUNT_TYPE_ID, B.BALANCE
