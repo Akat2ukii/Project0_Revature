@@ -1,14 +1,13 @@
 package com.revature.main;
 
 import java.io.IOException;
+import com.revature.beans.*;
 import java.sql.*;
 import java.util.*;
 
 import com.revature.beans.User;
 import com.revature.dao.*;
 import com.revature.util.ConnectionUtil;
-
-import java.util.Scanner;
 
 
 
@@ -69,6 +68,10 @@ public class Driver {
 					 	int balance = Integer.parseInt(balanceS);
 					 	BankAccountDAO bad = new BankAccountDAOImpl();
 					 	bad.createBAccount(myid, aType, balance);
+					 	
+
+					 	
+					 	
 					 	
 				 	}
 				 	else {
