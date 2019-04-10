@@ -77,7 +77,7 @@ public class UserDAOImpl implements UserDAO{
 		for (int i = 0; i < ul.size(); i++) {
 			System.out.println(ul.get(i));
 		}
-		System.out.println("YESSSSS");
+		
 		return ul;
 	}
 
@@ -119,7 +119,7 @@ public class UserDAOImpl implements UserDAO{
 					+"FROM BANK_ACCOUNT B "
 					+"INNER JOIN USR "
 					+"ON "  
-						+"USR.USR_ID = B.USR_ID "
+					+"USR.USR_ID = B.USR_ID "
 					+"WHERE "
 					+"(USR.USERNAME= ?) AND (USR.PASSWORD= ?) ";
 			
