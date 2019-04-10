@@ -13,6 +13,6 @@ public interface UserDAO {
 	public void createUser (String firstName, String lastName, String userName, String password, int userTypeId);
 	//public void updateUser(User user);
 	//public void deleteUser(User user);
-	public List<BankAccount> getAccountDetails(String userName, String password); 
+	public List<BankAccount> getAccountDetails(int userId); 
 		
 }

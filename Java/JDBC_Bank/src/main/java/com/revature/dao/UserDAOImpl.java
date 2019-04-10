@@ -77,7 +77,6 @@ public class UserDAOImpl implements UserDAO{
 		for (int i = 0; i < ul.size(); i++) {
 			System.out.println(ul.get(i));
 		}
-		System.out.println("YESSSSS");
 		return ul;
 	}
 
@@ -108,13 +107,49 @@ public class UserDAOImpl implements UserDAO{
 	}
 
 	@Override
-	public List<BankAccount> getAccountDetails(String userName, String password) {
+	public List<BankAccount> getAccountDetails(int userId) {
+		List<BankAccount> al = new ArrayList<>();
+		
+		try (Connection con = ConnectionUtil.getConnection()) {
+			String sql = 
+					
+					"SELECT * "
+					+"FROM BANK_ACCOUNT B "
+					+"WHERE " 
+					+    "B.USR_ID = ?"; 
+			
+			PreparedStatement stmtGet = con.prepareStatement(sql);
+			stmtGet.setInt(1, userId);
+			ResultSet rs = stmtGet.executeQuery();
+			while (rs.next()) {
+				int accountId = rs.getInt("BANK_ACCOUNT_ID");
+				int id = rs.getInt("USR_ID");
+				int accountTypeId = rs.getInt("ACCOUNT_TYPE_ID");
+				double balance = rs.getDouble("BALANCE");
+				
+				al.add(new BankAccount(accountId, userId, accountTypeId, balance));
+			}
+				
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return al; 
+	}
+	
+	/*
+	public List<BankAccount> getAccountDetails(int userId) {
 		
 		List<BankAccount> al = new ArrayList<>();
 		
 		try (Connection con = ConnectionUtil.getConnection()) {
 			String sql = 
 					
+					"SELECT * "
+					+"FROM BANK_ACCOUNT B "
+					+"WHERE " 
+					+    "B.USR_ID = 2 "; 
+			
+					/*
 					"SELECT B.BANK_ACCOUNT_ID, B.USR_ID, B.ACCOUNT_TYPE_ID, B.BALANCE "
 					+"FROM BANK_ACCOUNT B "
 					+"INNER JOIN USR "
@@ -122,7 +157,8 @@ public class UserDAOImpl implements UserDAO{
 						+"USR.USR_ID = B.USR_ID "
 					+"WHERE "
 					+"(USR.USERNAME= ?) AND (USR.PASSWORD= ?) ";
-			
+					*/
+			/*
 			PreparedStatement stmtGet = con.prepareStatement(sql);
 			stmtGet.setString(1, userName);
 			stmtGet.setString(2, password);
@@ -141,6 +177,7 @@ public class UserDAOImpl implements UserDAO{
 		}
 		return al; 
 	}
+	*/
 	
 	/*
 	@Override

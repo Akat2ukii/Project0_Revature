@@ -113,23 +113,49 @@ public class Driver {
 			 
 			 //cases 
 			 switch(choosingR1) {
-			 	case "v": 	System.out.println(ud.getAccountDetails(thisUser.getUsername(), thisUser.getPassword()).get(0));
+			 	case "v": 	List<BankAccount> accountList; /* = new ArrayList<BankAccount>();*/
+			 				accountList = ud.getAccountDetails(thisUser.getId()); 
+			 				BankAccount bankAccount; 
+			 				for (int i = 0 ;  i < accountList.size(); i++) {
+			 					bankAccount = ud.getAccountDetails(thisUser.getId()).get(i); 
+				 				System.out.println(bankAccount);
+			 				}
 			 				break; 
 			 	// more cases here . . . 
 			 }
 			 
 			
 			 // . . . more code here . . . 
-			 
-			 
-			 
+				 
 			 
 		 } else if (choosing0.contentEquals("super")) {
+			 //
 			 //choices for super users 
-			 Scanner choiceR1 = new Scanner(System.in);
-			 System.out.println("\nPlease enter one of the following:\n'v' to view all accounts,\n'c' to create a new account,\n'd' to delete all user accounts, or\n'u' to update an account.");
-			 String choosingR1 = choiceR1.nextLine();
-			 // . . . more code here. . . 
+			 //
+			 //user login process 
+			 Scanner un = new Scanner(System.in);
+			 System.out.println("Please enter your username.");
+			 String inUn = un.nextLine();
+			 //
+			 Scanner pass = new Scanner(System.in);
+			 System.out.println("Please enter your password.");
+			 String inPass = pass.nextLine();
+			 //  
+			 UserDAO ud = new UserDAOImpl();
+			 List<User> myList = ud.getUserByUserNamePassword(inUn, inPass);
+			 User thisUser = myList.get(0); 
+			 //
+			 if (thisUser.getUserTypeId() == 2) {
+				 // 
+				 Scanner choiceR1 = new Scanner(System.in);
+				 System.out.println("\nWelcome superuser "+thisUser.getFirstName()+"\nPlease enter one of the following:\n'v' to view all accounts,\n'c' to create a new account,\n'd' to delete all user accounts, or\n'u' to update an account.");
+				 String choosingR1 = choiceR1.nextLine();
+				 // . . . more code here. . . 
+				 
+			 } else {
+				 System.out.println("Sorry, "+thisUser.getFirstName()+", you do not have superuser priveledges.\nPlease start again and enter your user credentials to access your account.");
+			 }
+			 //
 		 }
 		 //end of block for non-registered users 
 	}
