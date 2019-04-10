@@ -19,13 +19,13 @@ public class Driver {
 		 Scanner choice0 = new Scanner(System.in);
 		 System.out.println("Are you a registerd user?");
 		 String choosing0 = choice0.nextLine();
-		 if (choosing0.contentEquals("no")) {
+		 if (choosing0.toLowerCase().contentEquals("no")) {
 		
 			 //choice1 - option for unregistered users to register as user 	
 			 Scanner choice1 = new Scanner(System.in);
 			 System.out.println("Would you like to create a new user?");
 			 String choosing = choice1.nextLine();
-			 if (choosing.contentEquals("yes")) {
+			 if (choosing.toLowerCase().contentEquals("yes")) {
 				 Scanner fName = new Scanner(System.in);
 				 System.out.println("What is your firstname?");
 				 String name1 = fName.nextLine();
@@ -45,7 +45,7 @@ public class Driver {
 				 	Scanner choice2 = new Scanner(System.in);
 				 	System.out.println("Would you like to create an account?");
 				 	String choosing2 = choice2.nextLine();
-				 	if (choosing2.contentEquals("yes")) {
+				 	if (choosing2.toLowerCase().contentEquals("yes")) {
 				 		List<User> myList = ud.getUserByUserNamePassword(name3, passing);
 				 		User thisList = myList.get(0);
 				 		int myid = thisList.getId();
@@ -53,10 +53,10 @@ public class Driver {
 					 	System.out.println("Would you like a checking or savings account?");
 					 	String accountMake1C = accountMake1.nextLine();
 					 	int aType = 0;
-					 	if (accountMake1C.contentEquals("checkings")) {
+					 	if (accountMake1C.toLowerCase().contentEquals("checkings")) {
 					 		aType = 1;
 					 	}
-					 	else if(accountMake1C.contentEquals("savings")) {
+					 	else if(accountMake1C.toLowerCase().contentEquals("savings")) {
 					 		aType = 2;
 					 	}
 					 	else {
@@ -73,7 +73,7 @@ public class Driver {
 					 	
 				 	}
 				 	else {
-				 		System.out.println("derpderpderpderpderpderp");
+				 		System.out.println("Please type in either yes or no.");
 				 	}
 				 			 
 				 		//choice3 -- option to exit or proceed to the registered users portal
@@ -87,10 +87,9 @@ public class Driver {
 				 //code for non-registered and don't want to register
 				 System.out.println("Reeeee");
 			 }
-		 System.out.println("Username is: " + choosing);
 		 } 
 		 // end of block for non-users registering
-		 else  if (choosing0.contentEquals("yes")) {
+		 else  if (choosing0.toLowerCase().contentEquals("yes")) {
 		
 			 //user login process 
 			 Scanner un = new Scanner(System.in);
@@ -108,14 +107,50 @@ public class Driver {
 			 // 
 			 //options for registered users 
 			 Scanner choiceR1 = new Scanner(System.in);
-			 System.out.println("\nPlease enter one of the following:\n'v' to view your accounts,\n'c' to create a new account,\n'd' to delete an empty account, or\n'f' to deposit or withdraw funds.");
+			 System.out.println("\nPlease enter one of the following:\n'v' "
+			 					+ "to view your accounts,\n'c' "
+			 					+ "to create a new account,\n'd' "
+			 					+ "to delete an empty account, or\n'f' "
+			 					+ "to deposit or withdraw funds.");
+			 
 			 String choosingR1 = choiceR1.nextLine();
 			 
 			 //cases 
 			 switch(choosingR1) {
-			 	case "v": 	System.out.println(ud.getAccountDetails(thisUser.getUsername(), thisUser.getPassword()).get(0));
-			 				break; 
-			 	// more cases here . . . 
+			 	case "v": 	
+			 		System.out.println(ud.getAccountDetails(thisUser.getUsername(), thisUser.getPassword()).get(0));
+			 	break; 
+			 	
+			 	case "c":
+			 		Scanner accountMake1 = new Scanner(System.in);
+				 	System.out.println("Would you like a checking or savings account?");
+				 	String accountMake1C = accountMake1.nextLine();
+				 	int aType = 0;
+				 	if (accountMake1C.toLowerCase().contentEquals("checking")) {
+				 		aType = 1;
+				 	}
+				 	else if(accountMake1C.toLowerCase().contentEquals("savings")) {
+				 		aType = 2;
+				 	}
+				 	else {
+				 		System.out.println("Please type out 'savings' or 'checking'");
+				 		return;
+				 	}
+				 	Scanner accountMake2 = new Scanner(System.in);
+				 	System.out.println("How much would you like to deposit?");
+				 	String balanceS = accountMake2.nextLine();
+				 	int balance = Integer.parseInt(balanceS);
+				 	BankAccountDAO bad = new BankAccountDAOImpl();
+				 	bad.createBAccount(thisUser.getId(), aType, balance);
+			 	break; 
+			 	
+			 	case "d":
+			 				
+			 	break; 
+			 	case "f":
+			 	break;
+			 	default:
+			 	
 			 }
 			 
 			
@@ -124,10 +159,14 @@ public class Driver {
 			 
 			 
 			 
-		 } else if (choosing0.contentEquals("super")) {
+		 } else if (choosing0.toLowerCase().contentEquals("super")) {
 			 //choices for super users 
 			 Scanner choiceR1 = new Scanner(System.in);
-			 System.out.println("\nPlease enter one of the following:\n'v' to view all accounts,\n'c' to create a new account,\n'd' to delete all user accounts, or\n'u' to update an account.");
+			 System.out.println("\nPlease enter one of the following:\n'v' "
+			 					+ "to view all accounts,\n'c' "
+			 					+ "to create a new account,\n'd' "
+			 					+ "to delete all user accounts, or\n'u' "
+			 					+ "to update an account.");
 			 String choosingR1 = choiceR1.nextLine();
 			 // . . . more code here. . . 
 		 }

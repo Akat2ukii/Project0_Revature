@@ -25,32 +25,45 @@ public class BankAccountDAOImpl implements BankAccountDAO {
 
 	@Override
 	public void createBAccount(int UserId, int accountTypeID, double balance) {
-		// try-with-resources... resources will be closed at the end of the block
 
-				// works for all AutoCloseable resources
-				try (Connection con = ConnectionUtil.getConnection()) {
-					// write a join to unify Bear, Cave, and BearType into one ResultSet
-					// map the ResultSet onto a list of Bear objects
-					String sql = "INSERT INTO BANK_ACCOUNT(USR_ID, ACCOUNT_TYPE_ID, BALANCE) " 
-								 + "VALUES (?, ?, ?)";
+		try (Connection con = ConnectionUtil.getConnection()) {
+
+			String sql = "INSERT INTO BANK_ACCOUNT(USR_ID, ACCOUNT_TYPE_ID, BALANCE) " 
+						  + "VALUES (?, ?, ?)";
 						
-					PreparedStatement pstmt = con.prepareStatement(sql);
-					pstmt.setInt(1, UserId);
-					pstmt.setInt(2, accountTypeID);
-					pstmt.setDouble(3, balance);
-					pstmt.executeUpdate();
+			PreparedStatement pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, UserId);
+			pstmt.setInt(2, accountTypeID);
+			pstmt.setDouble(3, balance);
+			pstmt.executeUpdate();
 				
 					
-				} 
-				catch (SQLException e) {
-					e.printStackTrace();
-				}
+		} 
+			catch (SQLException e) {
+				e.printStackTrace();
+			}
 	}
 
 	@Override
-	public void updateBAccount(User user) {
-		// TODO Auto-generated method stub
+	public void updateBAccount(int balanceOfUser, int idOfUser) {
 		
+		try (Connection con = ConnectionUtil.getConnection()) {
+
+			String sql = "UPDATE BANK_ACCOUNT " + 
+						 "SET BALANCE = ? " + 
+						 "WHERE  " + 
+						 "BANK_ACCOUNT_ID = ?";
+						
+			PreparedStatement pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, balanceOfUser);
+			pstmt.setInt(2, idOfUser);
+			pstmt.executeUpdate();
+				
+					
+		} 
+			catch (SQLException e) {
+				e.printStackTrace();
+			}
 	}
 
 	@Override
