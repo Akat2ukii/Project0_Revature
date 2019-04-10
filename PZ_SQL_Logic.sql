@@ -39,11 +39,9 @@ WHERE USR_ID = 2;
 --This logic works
 SELECT B.BANK_ACCOUNT_ID, B.USR_ID, B.ACCOUNT_TYPE_ID, B.BALANCE
 FROM BANK_ACCOUNT B
-INNER JOIN USR 
-ON 
-    USR.USR_ID = B.USR_ID
 WHERE 
-(USR.USERNAME='BJones') AND (USR.PASSWORD='p@ssword'); 
+    B.USR_ID = 2; 
+
 
 
 -- logic for a user to create an account --- 
