@@ -2,6 +2,7 @@ package com.revature.beans;
 
 public class User {
 	
+	//instance variables 
 	private int id;
 	private String firstName;
 	private String lastName;
@@ -9,6 +10,7 @@ public class User {
 	private String password;
 	private int userTypeId;
 	
+	//constructors 
 	public User() {
 	}
 	public User(int id, String firstName, String lastName, String username, String password, int userTypeId) {
@@ -20,7 +22,13 @@ public class User {
 		this.password = password;
 		this.userTypeId = userTypeId;
 	}
+	public User(String username, String password) {
+		super();
+		this.username = username;
+		this.password = password;
+	}
 	
+	//getters and setters 
 	public int getId() {
 		return id;
 	}

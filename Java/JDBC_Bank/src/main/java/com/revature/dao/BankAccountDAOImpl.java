@@ -45,28 +45,6 @@ public class BankAccountDAOImpl implements BankAccountDAO {
 				catch (SQLException e) {
 					e.printStackTrace();
 				}
-				
-
-		// works for all AutoCloseable resources
-		try (Connection con = ConnectionUtil.getConnection()) {
-			// write a join to unify Bear, Cave, and BearType into one ResultSet
-			// map the ResultSet onto a list of Bear objects
-			String sql = "INSERT INTO BANK_ACCOUNT(USR_ID, ACCOUNT_TYPE_ID, BALANCE) " 
-						 + "VALUES (?, ?, ?)";
-				
-			PreparedStatement pstmt = con.prepareStatement(sql);
-			pstmt.setInt(1, UserId);
-			pstmt.setInt(2, accountTypeID);
-			pstmt.setDouble(3, balance);
-			pstmt.executeUpdate();
-		
-			
-		} 
-		catch (SQLException e) {
-			e.printStackTrace();
-		}
-
-		
 	}
 
 	@Override

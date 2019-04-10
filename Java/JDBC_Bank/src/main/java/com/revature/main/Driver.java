@@ -71,8 +71,6 @@ public class Driver {
 					 	
 
 					 	
-					 	
-					 	
 				 	}
 				 	else {
 				 		System.out.println("derpderpderpderpderpderp");
@@ -93,11 +91,39 @@ public class Driver {
 		 } 
 		 // end of block for non-users registering
 		 else  if (choosing0.contentEquals("yes")) {
-			 //choices for registered users 
+		
+			 //user login process 
+			 Scanner un = new Scanner(System.in);
+			 System.out.println("Please enter your username.");
+			 String inUn = un.nextLine();
+			 //
+			 Scanner pass = new Scanner(System.in);
+			 System.out.println("Please enter your password.");
+			 String inPass = pass.nextLine();
+			 //  
+			 UserDAO ud = new UserDAOImpl();
+			 List<User> myList = ud.getUserByUserNamePassword(inUn, inPass);
+			 User thisUser = myList.get(0);
+			 
+			 // 
+			 //options for registered users 
 			 Scanner choiceR1 = new Scanner(System.in);
 			 System.out.println("\nPlease enter one of the following:\n'v' to view your accounts,\n'c' to create a new account,\n'd' to delete an empty account, or\n'f' to deposit or withdraw funds.");
 			 String choosingR1 = choiceR1.nextLine();
-			 // . . . more code here. . . 
+			 
+			 //cases 
+			 switch(choosingR1) {
+			 	case "v": 	System.out.println(ud.getAccountDetails(thisUser.getUsername(), thisUser.getPassword()).get(0));
+			 				break; 
+			 	// more cases here . . . 
+			 }
+			 
+			
+			 // . . . more code here . . . 
+			 
+			 
+			 
+			 
 		 } else if (choosing0.contentEquals("super")) {
 			 //choices for super users 
 			 Scanner choiceR1 = new Scanner(System.in);

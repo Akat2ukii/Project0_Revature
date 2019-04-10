@@ -12,7 +12,9 @@ public class ConnectionUtil {
 	
 	// do not ever!!!! hardcode credentials like this
 	public static Connection getConnection() throws SQLException {
-
+		
+		return DriverManager.getConnection("jdbc:oracle:thin:@projectzero.cf1xjil2bepa.us-east-2.rds.amazonaws.com:1521/orcl", "admin", "p4ssw0rd");	
+		
 	}
 	
 	
