@@ -1,11 +1,10 @@
 package com.revature.main;
 
 import java.io.IOException;
+
 import com.revature.beans.*;
 import java.sql.*;
 import java.util.*;
-
-import com.revature.beans.User;
 import com.revature.dao.*;
 import com.revature.util.ConnectionUtil;
 
@@ -148,6 +147,42 @@ public class Driver {
 			 				
 			 	break; 
 			 	case "f":
+			 		BankAccountDAO bad1 = new BankAccountDAOImpl();
+				 	Scanner balanceEdit2 = new Scanner(System.in);
+				 	System.out.println("What is your account number?");
+				 	String balancing2 = balanceEdit2.nextLine();
+				 	int balancinging2 = Integer.parseInt(balancing2);
+				 	Scanner balanceEdit3 = new Scanner(System.in);
+				 	System.out.println("Would you like to deposit or withdraw?");
+				 	String balancing3 = balanceEdit3.nextLine();
+				 	Scanner balanceEdit4 = new Scanner(System.in);
+				 	System.out.println("How much would you like to withdraw or deposit?");
+				 	String balancing4 = balanceEdit4.nextLine();
+				 	int balancinging4 = Integer.parseInt(balancing4);
+				 	
+				 	BankAccount me = bad1.getBAccountById(balancinging2);
+				 	double changingValue = 0;
+				 	if (balancinging4 == 0) {
+				 		System.out.println("You cannot deposit or withdraw an amount of 0!");
+				 	}
+				 	else if (balancing3.toLowerCase().contentEquals("deposit") && balancinging4 > 0) {
+				 		changingValue = me.getBalance() + balancinging4;
+					 	bad1.updateBAccount(changingValue, me.getId());
+				 	}
+				 	else if (balancing3.toLowerCase().contentEquals("withdraw") && balancinging4 > 0) {
+				 		changingValue = me.getBalance() - balancinging4;
+				 		if (changingValue < 0) {
+				 			System.out.println("You cannot have an overdraft fee!");
+				 		}
+				 		else {
+				 			bad1.updateBAccount(changingValue, me.getId());
+				 		}
+					 	
+				 	}
+				 	else {
+				 		System.out.println("No");
+				 	}
+
 			 	break;
 			 	default:
 			 	

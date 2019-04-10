@@ -2,14 +2,15 @@ package com.revature.dao;
 
 import java.util.List;
 
+import com.revature.beans.BankAccount;
 import com.revature.beans.User;
 
 public interface BankAccountDAO {
 	//user methods 
-	public List<User> getBAccount();
-	public User getBAccountById(int id);
+	public List<BankAccount> getBAccount();
+	public BankAccount getBAccountById(int id);
 	public void createBAccount (int UserId, int accountTypeID, double balance);
-	public void updateBAccount(int amountPut, int idOfUser);
+	public void updateBAccount(double balanceOfUser, int idOfUser);
 	public void deleteBAccount(User user);
 	
 }
