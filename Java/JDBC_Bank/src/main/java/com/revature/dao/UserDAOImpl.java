@@ -135,59 +135,5 @@ public class UserDAOImpl implements UserDAO{
 		}
 		return al; 
 	}
-	
-	/*
-	public List<BankAccount> getAccountDetails(int userId) {
-		
-		List<BankAccount> al = new ArrayList<>();
-		
-		try (Connection con = ConnectionUtil.getConnection()) {
-			String sql = 
-					
-					"SELECT * "
-					+"FROM BANK_ACCOUNT B "
-					+"WHERE " 
-					+    "B.USR_ID = 2 "; 
-			
-					/*
-					"SELECT B.BANK_ACCOUNT_ID, B.USR_ID, B.ACCOUNT_TYPE_ID, B.BALANCE "
-					+"FROM BANK_ACCOUNT B "
-					+"INNER JOIN USR "
-					+"ON "  
-					+"USR.USR_ID = B.USR_ID "
-					+"WHERE "
-					+"(USR.USERNAME= ?) AND (USR.PASSWORD= ?) ";
-					*/
-			/*
-			PreparedStatement stmtGet = con.prepareStatement(sql);
-			stmtGet.setString(1, userName);
-			stmtGet.setString(2, password);
-			ResultSet rs = stmtGet.executeQuery();
-			while (rs.next()) {
-				int accountId = rs.getInt("BANK_ACCOUNT_ID");
-				int userId = rs.getInt("USR_ID");
-				int accountTypeId = rs.getInt("ACCOUNT_TYPE_ID");
-				double balance = rs.getDouble("BALANCE");
-				
-				al.add(new BankAccount(accountId, userId, accountTypeId, balance));
-			}
-				
-		}catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return al; 
-	}
-	*/
-	
-	/*
-	@Override
-	public void updateUser(User user) {
-		// TODO Auto-generated method stub
-	}
-	@Override
-	public void deleteUser(User user) {
-		// TODO Auto-generated method stub
-	}
-	*/
 
 }

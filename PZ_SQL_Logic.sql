@@ -43,7 +43,6 @@ WHERE
     B.USR_ID = 2; 
 
 
-
 -- logic for a user to create an account --- 
  
 INSERT INTO BANK_ACCOUNT(USR_ID, ACCOUNT_TYPE_ID, BALANCE)
@@ -84,3 +83,40 @@ FROM BANK_ACCOUNT B
 LEFT JOIN USR U
 ON 
     U.USR_ID = B.USR_ID; 
+
+-- logic to build transation table -- 
+CREATE OR REPLACE PROCEDURE  SP_GET_MAX_ACTIVITY(INDX OUT INTEGER) AS 
+BEGIN 
+SELECT MAX(ACTIVITY_ID) INTO INDX
+FROM ACTIVITY; 
+END;
+/ 
+
+-- test of stored procudure -- 
+DECLARE 
+INDX INTEGER; 
+BEGIN 
+    SP_GET_MAX_ACTIVITY(INDX); 
+    DBMS_OUTPUT.PUT_LINE('Max Index is : '||INDX); 
+END; 
+
+-- update activity fields --- 
+UPDATE ACTIVITY A
+SET 
+A.BANK_ACCOUNT_ID = ?
+A.ACTIVITY_TYPE_ID = ?, 
+A.TX_DESCRIPTION = ? 
+WHERE 
+A.ACTIVITY_ID = ? "; 
+
+--- add balance column to activity table -- 
+ALTER TABLE ACTIVITY
+ADD  CURRENT_BALANCE DOUBLE PRECISION;
+/ 
+
+--test -- 
+
+UPDATE BANK_ACCOUNT  
+SET BALANCE = 10   
+WHERE BANK_ACCOUNT_ID = 5 
+COMMIT; 
