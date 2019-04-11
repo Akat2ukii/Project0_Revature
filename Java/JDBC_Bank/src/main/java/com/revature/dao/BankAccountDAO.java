@@ -10,7 +10,7 @@ public interface BankAccountDAO {
 	public List<BankAccount> getBAccount();
 	public BankAccount getBAccountById(int id);
 	public void createBAccount (int UserId, int accountTypeID, double balance);
-	public void updateBAccount(double balanceOfUser, int idOfUser);
+	public void updateBAccount(double balanceOfUser,int bankAccId, int idOfUser);
 	public void deleteBAccount(User user);
 	
 }
