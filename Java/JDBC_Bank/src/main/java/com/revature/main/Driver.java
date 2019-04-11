@@ -175,7 +175,7 @@ public class Driver {
 			idForAccount();
 		}
 		Scanner transactionType = new Scanner(System.in);
-		System.out.println("Would you like to deposit or withdraw?");
+		System.out.println("Would you like to deposit, withdraw or exit?");
 		String transaction = transactionType.nextLine();
 		if (transaction.toLowerCase().contentEquals("withdraw") || transaction.toLowerCase().contentEquals("deposit")) {
 			Scanner amountT = new Scanner(System.in);
@@ -202,8 +202,8 @@ public class Driver {
 					 	int activityTypeId = 1;
 					 	String txDescription = "deposit"; 
 					 	double currentBalance = changingValue; 
-					 	int maxActivityIndx = bad1.getMaxActivity(); 
-					 	bad1.updateActivity(me.getId(), maxActivityIndx, activityTypeId, txDescription, currentBalance); 
+					 	int maxActivityIndx = bad.getMaxActivity(); 
+					 	bad.updateActivity(userAccount.getId(), maxActivityIndx, activityTypeId, txDescription, currentBalance); 
 				Scanner query1 = new Scanner(System.in);
 				System.out.println("Would you like to continue editing this account?");
 				String answer1 = query1.nextLine();
@@ -229,8 +229,8 @@ public class Driver {
 					 	int activityTypeId = 1;
 					 	String txDescription = "deposit"; 
 					 	double currentBalance = changingValue; 
-					 	int maxActivityIndx = bad1.getMaxActivity(); 
-					 	bad1.updateActivity(me.getId(), maxActivityIndx, activityTypeId, txDescription, currentBalance); 
+					 	int maxActivityIndx = bad.getMaxActivity(); 
+					 	bad.updateActivity(userAccount.getId(), maxActivityIndx, activityTypeId, txDescription, currentBalance); 
 					Scanner query2 = new Scanner(System.in);
 					System.out.println("Would you like to continue editing this account?");
 					String answer2 = query2.nextLine();
@@ -252,25 +252,25 @@ public class Driver {
 		}
 		
 		else {
-			System.out.println("Please either type in deposit or withdraw");
+			System.out.println("Please either type in deposit, withdraw or exit.");
 			accountUpdate(userAccount.getId());
 		}
 	}
 
-  private static void userTransactions() {
-   	List<Activity> activityList; 
-							BankAccountDAO bad2 = new BankAccountDAOImpl();
+    private static void userTransactions() {
+    	List<Activity> activityList; 
 							//
-							Scanner accNum = new Scanner(System.in);
-							System.out.println("Please enter an account number.");
-							int inAccNum = Integer.valueOf(pass.nextLine());
+			Scanner accNum = new Scanner(System.in);
+			System.out.println("Please enter an account number.");
+			int inAccNum = Integer.valueOf(accNum.nextLine());
 							//
- 							activityList = bad2.getActivity(inAccNum); 
- 							Activity activity; 
- 							for (int i = 0 ;  i < activityList.size(); i++) {
- 									activity = bad2.getActivity(inAccNum).get(i); 
- 									System.out.println(activity);
-  }
+			activityList = bad.getActivity(inAccNum); 
+			Activity activity; 
+			for (int i = 0 ;  i < activityList.size(); i++) {
+ 					activity = bad.getActivity(inAccNum).get(i); 
+ 					System.out.println(activity);
+			}
+    }
 	private static void choiceOne() {
 
 		// choice0 -- is the user registered?

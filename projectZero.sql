@@ -183,10 +183,10 @@ VALUES (5, 2, 100);
 -- NOTE, there are not checks here to see if the account is empty. This is simply the logic to delete. 
 
 -- first empty an account --- 
-UPDATE BANK_ACCOUNT
-SET BALANCE = 0
-WHERE 
-    BANK_ACCOUNT_ID = 2; 
+    UPDATE BANK_ACCOUNT
+    SET BALANCE = 0
+    WHERE 
+        BANK_ACCOUNT_ID = 2; 
 / 
 
 -- next delete ----
