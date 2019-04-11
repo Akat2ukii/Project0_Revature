@@ -111,11 +111,11 @@ public class Driver {
 		ud.createUser(name1, name2, naming, passing, 1);
 			
 	}
-	
+	/*
 	userUpdate(accountId) {
-		// stuff goes here
+		// stuff goes here 
 	}
-
+	*/
 	
 	private static void userLogin() {
 		// user login process
@@ -401,15 +401,18 @@ public class Driver {
 					superUserCreateUser();
 					break;
 					
-				/*
+				
 				case "d":
 
 					break;
-				*/
+			
 					
 				case "u":
+					
+					/*
 					userUpdate(idForAccount());
 					break;
+					*/
 					
 				default:
 			
