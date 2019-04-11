@@ -34,11 +34,18 @@ public class Driver {
 				return;
 			}
 			System.out.println("How much would you like to deposit?");
-			String balanceS = choice2.nextLine();
-			int balance = Integer.parseInt(balanceS);
-			bad.createBAccount(myid, aType, balance);
-			System.out.println("Thank you, " + username + " we have sucessfully created your account.");
-			choiceOne();
+			try {			
+				String balanceS = choice2.nextLine();
+				int balance = Integer.parseInt(balanceS);
+				bad.createBAccount(myid, aType, balance);
+				System.out.println("Thank you, " + username + " we have sucessfully created your account.");
+				choiceOne();
+			}
+			catch (NumberFormatException e) {
+				System.out.println("Please enter a bloody number.");
+				newUserCreateAccount(naming, passing);
+			}
+
 		} 
 		else if (choosing2.toLowerCase().contentEquals("no")) {
 			choiceOne();
@@ -92,8 +99,15 @@ public class Driver {
 		System.out.println("Please enter your password.");
 		String inPass = un.nextLine();
 		//
-		List<User> myList = ud.getUserByUserNamePassword(inUn, inPass);
-		thisUser = myList.get(0);
+		try {
+			List<User> myList = ud.getUserByUserNamePassword(inUn, inPass);
+			thisUser = myList.get(0);
+		}
+		catch (IndexOutOfBoundsException e) {
+			System.out.println("I'm sorry, but those inputs do not match with anything we have in memory, please try to log in again or make a new account.");
+			choiceOne();
+		}
+
 	}
 	
 	private static void viewAccounts() {
@@ -119,12 +133,19 @@ public class Driver {
 		} 
 		else {
 			System.out.println("Please type out 'savings' or 'checking'");
-			return;
+			createAccount();
 		}
 		System.out.println("How much would you like to deposit?");
-		String balanceS = accountMake1.nextLine();
-		int balance = Integer.parseInt(balanceS);
-		bad.createBAccount(thisUser.getId(), aType, balance);
+		try {
+			String balanceS = accountMake1.nextLine();
+			int balance = Integer.parseInt(balanceS);
+			bad.createBAccount(thisUser.getId(), aType, balance);
+		}
+		catch (NumberFormatException e) {
+			System.out.println("Please enter a valid number.");
+			createAccount();
+		}
+
 		System.out.println("Would you like to make another account?");
 		String going1 = accountMake1.nextLine();
 		if (going1.toLowerCase().contentEquals("yes")) {
@@ -143,8 +164,9 @@ public class Driver {
 		Scanner verification = new Scanner(System.in);
 		System.out.println("What is your account number?");
 		String thisAccountId = verification.nextLine();
-		int returnId = Integer.parseInt(thisAccountId);
-		return returnId;
+	
+			int returnId = Integer.parseInt(thisAccountId);
+			return returnId;
 	}
 	
 	private static void accountUpdate(int id) {	
@@ -159,10 +181,15 @@ public class Driver {
 		if (transaction.toLowerCase().contentEquals("withdraw") || transaction.toLowerCase().contentEquals("deposit")) {
 			Scanner amountT = new Scanner(System.in);
 			System.out.println("How much would you like to withdraw or deposit?");
-			String amount = amountT.nextLine();
-			double amountNum = Double.parseDouble(amount);
-
-
+			double amountNum = 0;
+			try {
+				String amount = amountT.nextLine();
+				amountNum = Double.parseDouble(amount);
+			}
+			catch(NumberFormatException e) {
+				System.out.println("A number... really");
+				accountUpdate(userAccount.getId());
+			}
 
 			double changingValue = 0;
 			if (amountNum == 0) {
@@ -210,7 +237,7 @@ public class Driver {
 			}
 		}
 		else if (transaction.toLowerCase().contentEquals("exit")) {
-			
+			return;
 		}
 		
 		else {
