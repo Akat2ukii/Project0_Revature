@@ -109,21 +109,38 @@ public class Driver {
 			 System.out.println("\nPlease enter one of the following:\n'v' "
 			 					+ "to view your accounts,\n'c' "
 			 					+ "to create a new account,\n'd' "
-			 					+ "to delete an empty account, or\n'f' "
-			 					+ "to deposit or withdraw funds.");
+			 					+ "to delete an empty account,\n'f' "
+			 					+ "to deposit or withdraw funds, or\n'h' "
+			 					+ "to view your transaction history");
 			 
 			 String choosingR1 = choiceR1.nextLine();
 			 
 			 //cases 
 			 switch(choosingR1) {
-			 	case "v": 	List<BankAccount> accountList; /* = new ArrayList<BankAccount>();*/
+			 	
+			 	case "v": 	List<BankAccount> accountList; 
 			 				accountList = ud.getAccountDetails(thisUser.getId()); 
 			 				BankAccount bankAccount; 
 			 				for (int i = 0 ;  i < accountList.size(); i++) {
 			 					bankAccount = ud.getAccountDetails(thisUser.getId()).get(i); 
-				 				System.out.println(bankAccount);
+			 					System.out.println(bankAccount);
 			 				}
 			 				break; 
+			 	
+				case "h": 	List<Activity> activityList; 
+							BankAccountDAO bad2 = new BankAccountDAOImpl();
+							//
+							Scanner accNum = new Scanner(System.in);
+							System.out.println("Please enter an account number.");
+							int inAccNum = Integer.valueOf(pass.nextLine());
+							//
+ 							activityList = bad2.getActivity(inAccNum); 
+ 							Activity activity; 
+ 							for (int i = 0 ;  i < activityList.size(); i++) {
+ 									activity = bad2.getActivity(inAccNum).get(i); 
+ 									System.out.println(activity);
+ 				}
+ 				break; 
 
 			 	
 			 	case "c":
@@ -153,28 +170,44 @@ public class Driver {
 			 				
 			 	break; 
 			 	case "f":
+			 		//instance of bank account DOA
 			 		BankAccountDAO bad1 = new BankAccountDAOImpl();
+			 		//account number
 				 	Scanner balanceEdit2 = new Scanner(System.in);
 				 	System.out.println("What is your account number?");
 				 	String balancing2 = balanceEdit2.nextLine();
 				 	int balancinging2 = Integer.parseInt(balancing2);
+				 	//transfer type 
 				 	Scanner balanceEdit3 = new Scanner(System.in);
 				 	System.out.println("Would you like to deposit or withdraw?");
 				 	String balancing3 = balanceEdit3.nextLine();
+				 	//amount 
 				 	Scanner balanceEdit4 = new Scanner(System.in);
 				 	System.out.println("How much would you like to withdraw or deposit?");
 				 	String balancing4 = balanceEdit4.nextLine();
 				 	int balancinging4 = Integer.parseInt(balancing4);
 				 	
+				 	//instance of BankAccount from users userId
 				 	BankAccount me = bad1.getBAccountById(balancinging2);
+				 	
+				 	//sanitation of inputs 
 				 	double changingValue = 0;
 				 	if (balancinging4 == 0) {
 				 		System.out.println("You cannot deposit or withdraw an amount of 0!");
 				 	}
+				 	//update user's bankAccount balance field for deposit and UPDATE BALALANCE in DB
 				 	else if (balancing3.toLowerCase().contentEquals("deposit") && balancinging4 > 0) {
 				 		changingValue = me.getBalance() + balancinging4;
 					 	bad1.updateBAccount(changingValue, me.getId());
+					 	//
+					 	//update transaction record here 
+					 	int activityTypeId = 1;
+					 	String txDescription = "deposit"; 
+					 	double currentBalance = changingValue; 
+					 	int maxActivityIndx = bad1.getMaxActivity(); 
+					 	bad1.updateActivity(me.getId(), maxActivityIndx, activityTypeId, txDescription, currentBalance); 
 				 	}
+				 	//update user's bankAccount balance field for withdrawal and make UPDATE in DB 
 				 	else if (balancing3.toLowerCase().contentEquals("withdraw") && balancinging4 > 0) {
 				 		changingValue = me.getBalance() - balancinging4;
 				 		if (changingValue < 0) {
@@ -182,6 +215,13 @@ public class Driver {
 				 		}
 				 		else {
 				 			bad1.updateBAccount(changingValue, me.getId());
+				 			//
+				 			//update transaction record here
+				 			int activityTypeId = 2;
+						 	String txDescription = "withdrawal"; 
+						 	double currentBalance = changingValue; 
+						 	int maxActivityIndx = bad1.getMaxActivity(); 
+						 	bad1.updateActivity(me.getId(), maxActivityIndx, activityTypeId, txDescription, currentBalance); 
 				 		}
 					 	
 				 	}
@@ -223,7 +263,7 @@ public class Driver {
 				 // . . . more code here. . . 
 				 
 			 } else {
-				 System.out.println("Sorry, "+thisUser.getFirstName()+", you do not have superuser priveledges.\nPlease start again and enter your user credentials to access your account.");
+				 System.out.println("Sorry, "+thisUser.getFirstName()+", you do not have superuser priveleges.\nPlease start again and enter your user credentials to access your account.");
 			 }
 		 }
 		 //end of block for non-registered users 
