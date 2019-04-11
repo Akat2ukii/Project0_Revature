@@ -63,7 +63,8 @@ public class Driver {
 			newUserCreateAccount(naming, passing);
 		}
 	}
-
+	
+		
 	private static void createUser() {
 		// choice1 - option for unregistered users to register as user
 		Scanner choice1 = new Scanner(System.in);
@@ -94,7 +95,33 @@ public class Driver {
 		}
 		
 	}
+	
+	private static void superUserCreateUser() {
+		// 
+		
+		Scanner choice1 = new Scanner(System.in);
+			
+		System.out.println("firstname: ");
+		String name1 = choice1.nextLine();
+		//
+		System.out.println("lastname: ");
+		String name2 = choice1.nextLine();
+		//
+		System.out.println("username: ");
+		naming = choice1.nextLine();
+		//
+		System.out.println("password: ");
+		passing = choice1.nextLine();
 
+		ud.createUser(name1, name2, naming, passing, 1);
+			
+	}
+	
+	userUpdate(accountId) {
+		// stuff goes here
+	}
+
+	
 	private static void userLogin() {
 		// user login process
 		Scanner un = new Scanner(System.in);
@@ -124,6 +151,17 @@ public class Driver {
 			System.out.println(bankAccount);
 		}
 		validUserChoice();
+	}
+	// -- pick up here 
+	private static void viewAllAccounts() {
+		List<BankAccount> accountsList; 
+		accountsList = ud.getAllAccountDetails();
+		BankAccount bankAccount; 
+		for (int i = 0; i < accountsList.size(); i++) {
+			bankAccount = ud.getAllAccountDetails().get(i);
+			System.out.println(bankAccount);
+		}
+		choiceOne();
 	}
 	
 	private static void createAccount() {
@@ -328,17 +366,17 @@ public class Driver {
 		// end of block for non-users registering
 		else if (choosing0.toLowerCase().contentEquals("yes")) {
 			userLogin();
-
 			validUserChoice();
+
 
 			// . . . more code here . . .
 
 		} 
 		else if (choosing0.toLowerCase().contentEquals("super")) {
 			//
-			// choices for super users
+			// choices for superusers
 			//
-			// user login process
+			// superuser login process
 			Scanner un = new Scanner(System.in);
 			System.out.println("Please enter your username.");
 			String inUn = un.nextLine();
@@ -353,10 +391,40 @@ public class Driver {
 			if (thisUser.getUserTypeId() == 2) {
 				//
 				Scanner choiceR1 = new Scanner(System.in);
-				System.out.println("\nWelcome superuser " + thisUser.getFirstName()
-						+ "\nPlease enter one of the following:\n'v' to view all accounts,\n'c' to create a new account,\n'd' to delete all user accounts, or\n'u' to update an account.");
+				System.out.println("\nWelcome superuser " + thisUser.getFirstName() +
+						"\nPlease enter one of the following:\n" + 
+						"'v' to view all accounts,\n" +
+						"'c' to create a new users account,\n"+
+						"'d' to delete all user accounts, or\n"+
+						"'u' to update an account.");
+				
 				String choosingR1 = choiceR1.nextLine();
-				// . . . more code here. . .
+				
+				// superuser cases
+				switch (choosingR1) {
+				
+				case "v":
+					viewAllAccounts();
+					break;
+					
+				case "c":
+					superUserCreateUser();
+					break;
+					
+				/*
+				case "d":
+
+					break;
+				*/
+					
+				case "u":
+					userUpdate(idForAccount());
+					break;
+					
+				default:
+			
+
+				}
 
 			} 
 			else {

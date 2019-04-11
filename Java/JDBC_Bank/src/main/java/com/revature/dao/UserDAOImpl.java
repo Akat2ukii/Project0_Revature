@@ -136,5 +136,72 @@ public class UserDAOImpl implements UserDAO{
 		} 
 		return al; 
 	}
+	
+	@Override
+	public List<BankAccount> getAllAccountDetails() {
+		
+		List<BankAccount> al = new ArrayList<>();
+		
+		try (Connection con = ConnectionUtil.getConnection()) {
+			String sql = 
+					
+					"SELECT * " +
+					"FROM BANK_ACCOUNT "; 
+			
+			PreparedStatement stmtGet = con.prepareStatement(sql);
+			ResultSet rs = stmtGet.executeQuery();
+			while (rs.next()) {
+				int accountId = rs.getInt("BANK_ACCOUNT_ID");
+				int id = rs.getInt("USR_ID");
+				int accountTypeId = rs.getInt("ACCOUNT_TYPE_ID");
+				double balance = rs.getDouble("BALANCE");
+	
+				al.add(new BankAccount(accountId, id, accountTypeId, balance));
+			}
+				
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return al; 
+	}
+	
+	/*
+	@Override
+	public List<AllAccountDetails> getAllAccountDetails() {
+		
+		List<AllAccountDetails> accountDetailsList = new ArrayList<>();
+		
+		try (Connection con = ConnectionUtil.getConnection()) {
+			String sql = 
+					
+					"SELECT (B.BANK_ACCOUNT_ID, B.ACCOUNT_TYPE_ID, B.BALANCE, U.USR_ID, U.FIRSTNAME, U.LASTNAME, U.USERNAME, U.PASSWORD, U.USR_TYPE_ID) " + 
+					"FROM BANK_ACCOUNT B " +
+					"LEFT JOIN USR U " +
+					"ON" +
+					    "(U.USR_ID = B.USR_ID)"; 
+			
+			PreparedStatement stmtGet = con.prepareStatement(sql);
+			ResultSet rs = stmtGet.executeQuery();
+			while (rs.next()) {
+				int bankAccountId = rs.getInt("BANK_ACCOUNT_ID");
+				int accountTypeId = rs.getInt("ACCOUNT_TYPE_ID");
+				double balance = rs.getDouble("BALANCE");
+				int userId = rs.getInt("USR_ID");
+				String firstName = rs.getString("FIRSTNAME");
+				String lastName = rs.getString("LASTNAME");
+				String userName = rs.getString("USERNAME");
+				String passWord = rs.getString("PASSWORD");
+				int userTypeId = rs.getInt("USR_TYPE_ID");
+				
+				accountDetailsList.add(new AllAccountDetails(bankAccountId, accountTypeId, balance, userId, firstName, lastName, userName, passWord, userTypeId));
+			}
+				
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return accountDetailsList; 
+	}
+	*/
 
 }
