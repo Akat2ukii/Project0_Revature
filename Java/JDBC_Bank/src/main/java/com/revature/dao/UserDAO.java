@@ -2,7 +2,7 @@ package com.revature.dao;
 
 import java.util.List;
 
-import com.revature.beans.AllAccountDetails;
+// import com.revature.beans.AllAccountDetails;
 import com.revature.beans.BankAccount;
 import com.revature.beans.User;
 
