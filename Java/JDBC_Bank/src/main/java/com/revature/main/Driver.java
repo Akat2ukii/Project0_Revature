@@ -79,12 +79,12 @@ public class Driver {
 		else if (choosing.toLowerCase().contentEquals("no")) {
 			choiceOne();
 		} 
-		else if (choosing.toLowerCase().contentEquals("exit")) {
+		else if (choosing.toLowerCase().contentEquals("back")) {
 			choiceOne();
 		} 
 		else {
 			// code for non-registered and don't want to register
-			System.out.println("Please type in either 'yes' or 'no'. To go back, type in 'exit'");
+			System.out.println("Please type in either 'yes' or 'no'. To go back, type in 'back");
 			createUser();
 		}
 		
@@ -118,7 +118,7 @@ public class Driver {
 			bankAccount = ud.getAccountDetails(thisUser.getId()).get(i);
 			System.out.println(bankAccount);
 		}
-		choiceOne();
+		validUserChoice();
 	}
 	
 	private static void createAccount() {
@@ -152,7 +152,7 @@ public class Driver {
 			createAccount();
 		}
 		else if (going1.toLowerCase().contentEquals("no")) {
-			choiceOne();
+			validUserChoice();
 		}
 		else {
 			return;
@@ -271,6 +271,37 @@ public class Driver {
  					System.out.println(activity);
 			}
     }
+    
+    private static void validUserChoice () {
+		Scanner choiceR1 = new Scanner(System.in);
+		System.out.println("\nPlease enter one of the following:\n " + "'v' to view your accounts,\n "
+				+ "'c' to create a new account,\n " + "'d' to delete an empty account, or\n "
+				+ "'f' to deposit or withdraw funds.");
+
+		String choosingR1 = choiceR1.nextLine();
+
+		// cases
+		switch (choosingR1) {
+		case "v":
+			viewAccounts();
+			break;
+		case "h":
+			userTransactions();
+			break;    
+		case "c":
+			createAccount();
+			break;
+
+		case "d":
+
+			break;
+		case "f":
+			accountUpdate(idForAccount());
+			break;
+		default:
+
+		}
+    }
 	private static void choiceOne() {
 
 		// choice0 -- is the user registered?
@@ -285,36 +316,7 @@ public class Driver {
 		else if (choosing0.toLowerCase().contentEquals("yes")) {
 			userLogin();
 
-			//
-			// options for registered users
-			Scanner choiceR1 = new Scanner(System.in);
-			System.out.println("\nPlease enter one of the following:\n " + "'v' to view your accounts,\n "
-					+ "'c' to create a new account,\n " + "'d' to delete an empty account, or\n "
-					+ "'f' to deposit or withdraw funds.");
-
-			String choosingR1 = choiceR1.nextLine();
-
-			// cases
-			switch (choosingR1) {
-			case "v":
-				viewAccounts();
-				break;
-      case "h":
-          userTransactions();
-        break;    
-			case "c":
-				createAccount();
-				break;
-
-			case "d":
-
-				break;
-			case "f":
-				accountUpdate(idForAccount());
-				break;
-			default:
-
-			}
+			validUserChoice();
 
 			// . . . more code here . . .
 
