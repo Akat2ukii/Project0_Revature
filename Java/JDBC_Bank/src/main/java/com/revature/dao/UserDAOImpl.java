@@ -1,5 +1,6 @@
 package com.revature.dao;
 
+import java.io.IOException;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,7 +21,7 @@ public class UserDAOImpl implements UserDAO{
 		List<User> ul = new ArrayList<>();
 		// try-with-resources... resources will be closed at the end of the block
 		// works for all AutoCloseable resources
-		try (Connection con = ConnectionUtil.getConnection()) {
+		try (Connection con = ConnectionUtil.getConnectionFromFile("config.properties")) {
 			// write a join to unify Bear, Cave, and BearType into one ResultSet
 			// map the ResultSet onto a list of Bear objects
 			String sql = "SELECT U.USR_ID, U.FIRSTNAME, U.LASTNAME, U.USERNAME, U.PASSWORD, U.USR_TYPE_ID "
@@ -39,7 +40,7 @@ public class UserDAOImpl implements UserDAO{
 				ul.add(new User(userId, firstName, lastName, username, password, userTypeId));
 			}
 			
-		} catch (SQLException e) {
+		} catch (SQLException | IOException e) {
 			e.printStackTrace();
 		}
 		return ul;
@@ -50,7 +51,7 @@ public class UserDAOImpl implements UserDAO{
 		List<User> ul = new ArrayList<>();
 		// try-with-resources... resources will be closed at the end of the block
 		// works for all AutoCloseable resources
-		try (Connection con = ConnectionUtil.getConnection()) {
+		try (Connection con = ConnectionUtil.getConnectionFromFile("config.properties")) {
 			// write a join to unify Bear, Cave, and BearType into one ResultSet
 			// map the ResultSet onto a list of Bear objects
 			String sql = "SELECT U.USR_ID, U.FIRSTNAME, U.LASTNAME, U.USERNAME, U.PASSWORD, U.USR_TYPE_ID "
@@ -71,7 +72,7 @@ public class UserDAOImpl implements UserDAO{
 				ul.add(new User(userId, firstName, lastName, username, password1, userTypeId));
 			}
 			
-		} catch (SQLException e) {
+		} catch (SQLException | IOException e) {
 			e.printStackTrace();
 		}
 		for (int i = 0; i < ul.size(); i++) {
@@ -84,7 +85,7 @@ public class UserDAOImpl implements UserDAO{
 	public void createUser (String firstName, String lastName, String userName, String password, int userTypeId) {
 		// try-with-resources... resources will be closed at the end of the block
 		// works for all AutoCloseable resources
-		try (Connection con = ConnectionUtil.getConnection()) {
+		try (Connection con = ConnectionUtil.getConnectionFromFile("config.properties")) {
 			// write a join to unify Bear, Cave, and BearType into one ResultSet
 			// map the ResultSet onto a list of Bear objects
 			String sql = "INSERT INTO USR(FIRSTNAME, LASTNAME, USERNAME, PASSWORD, USR_TYPE_ID) " 
@@ -100,7 +101,7 @@ public class UserDAOImpl implements UserDAO{
 		
 			
 		} 
-		catch (SQLException e) {
+		catch (SQLException | IOException e) {
 			e.printStackTrace();
 		}
 		
@@ -110,7 +111,7 @@ public class UserDAOImpl implements UserDAO{
 	public List<BankAccount> getAccountDetails(int userId) {
 		List<BankAccount> al = new ArrayList<>();
 		
-		try (Connection con = ConnectionUtil.getConnection()) {
+		try (Connection con = ConnectionUtil.getConnectionFromFile("config.properties")) {
 			String sql = 
 					
 					"SELECT * "
@@ -130,9 +131,9 @@ public class UserDAOImpl implements UserDAO{
 				al.add(new BankAccount(accountId, userId, accountTypeId, balance));
 			}
 				
-		}catch (SQLException e) {
+		}catch (SQLException | IOException e) {
 			e.printStackTrace();
-		}
+		} 
 		return al; 
 	}
 	

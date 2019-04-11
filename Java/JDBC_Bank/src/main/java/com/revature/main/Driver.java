@@ -1,8 +1,13 @@
 package com.revature.main;
 
 import com.revature.beans.*;
+
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.*;
 import com.revature.dao.*;
+import com.revature.util.ConnectionUtil;
 
 public class Driver {
 	private static UserDAO ud = new UserDAOImpl();
@@ -80,12 +85,12 @@ public class Driver {
 		else if (choosing.toLowerCase().contentEquals("no")) {
 			choiceOne();
 		} 
-		else if (choosing.toLowerCase().contentEquals("exit")) {
+		else if (choosing.toLowerCase().contentEquals("back")) {
 			choiceOne();
 		} 
 		else {
 			// code for non-registered and don't want to register
-			System.out.println("Please type in either 'yes' or 'no'. To go back, type in 'exit'");
+			System.out.println("Please type in either 'yes' or 'no'. To go back, type in 'back");
 			createUser();
 		}
 		
@@ -145,7 +150,7 @@ public class Driver {
 			bankAccount = ud.getAccountDetails(thisUser.getId()).get(i);
 			System.out.println(bankAccount);
 		}
-		choiceOne();
+		validUserChoice();
 	}
 	// -- pick up here 
 	private static void viewAllAccounts() {
@@ -190,7 +195,7 @@ public class Driver {
 			createAccount();
 		}
 		else if (going1.toLowerCase().contentEquals("no")) {
-			choiceOne();
+			validUserChoice();
 		}
 		else {
 			return;
@@ -206,6 +211,14 @@ public class Driver {
 			return returnId;
 	}
 	
+	private static void deleteAccount() {
+		int thisIsThing = idForAccount();
+		System.out.println(thisIsThing);
+		System.out.println(thisUser.getId());
+		bad.deleteBAccount(thisIsThing, thisUser.getId());
+		validUserChoice ();
+		
+	}
 	private static void accountUpdate(int id) {	
 		userAccount = bad.getBAccountById(id);
 		if (userAccount.getUserId() != thisUser.getId()) {
@@ -309,6 +322,37 @@ public class Driver {
  					System.out.println(activity);
 			}
     }
+    
+    private static void validUserChoice () {
+		Scanner choiceR1 = new Scanner(System.in);
+		System.out.println("\nPlease enter one of the following:\n " + "'v' to view your accounts,\n "
+				+ "'c' to create a new account,\n " + "'d' to delete an empty account, or\n "
+				+ "'f' to deposit or withdraw funds.");
+
+		String choosingR1 = choiceR1.nextLine();
+
+		// cases
+		switch (choosingR1) {
+		case "v":
+			viewAccounts();
+			break;
+		case "h":
+			userTransactions();
+			break;    
+		case "c":
+			createAccount();
+			break;
+
+		case "d":
+			deleteAccount();
+			break;
+		case "f":
+			accountUpdate(idForAccount());
+			break;
+		default:
+
+		}
+    }
 	private static void choiceOne() {
 
 		// choice0 -- is the user registered?
@@ -322,42 +366,8 @@ public class Driver {
 		// end of block for non-users registering
 		else if (choosing0.toLowerCase().contentEquals("yes")) {
 			userLogin();
+			validUserChoice();
 
-			//
-			// options for registered users
-			Scanner choiceR1 = new Scanner(System.in);
-			System.out.println("\nPlease enter one of the following:\n " 
-					+ "'v' to view your accounts,\n "
-					+ "'c' to create a new account,\n " + "'d' to delete an empty account, or\n "
-					+ "'f' to deposit or withdraw funds.");
-
-			String choosingR1 = choiceR1.nextLine();
-
-			// cases
-			switch (choosingR1) {
-			
-			case "v":
-				viewAccounts();
-				break;
-				
-			case "h":
-				userTransactions();
-				break; 
-				
-			case "c":
-				createAccount();
-				break;
-
-			case "d":
-
-				break;
-			case "f":
-				accountUpdate(idForAccount());
-				break;
-				
-			default:
-
-			}
 
 			// . . . more code here . . .
 
@@ -435,18 +445,17 @@ public class Driver {
 
 	public static void main(String[] args) {
 		choiceOne();
+	try { 
+	  Connection con =
+	  ConnectionUtil.getConnectionFromFile("config.properties");
+	  System.out.println(con); 
+	  } 
+	catch (SQLException | IOException e) { 
+			  e.printStackTrace(); 
+	}
 
-//		  try { Connection con =
-//		  ConnectionUtil.getConnection();
-//		  System.out.println(con); } catch (SQLException e) { e.printStackTrace(); }
 
-//		  UserDAO ud = new UserDAOImpl();
-//		  List<User> userList = ud.getUser();
-//			
-//			for(User u : userList) {
-//				System.out.println(u);
-//			}
-//		  
+		  
 	}
 
 }
