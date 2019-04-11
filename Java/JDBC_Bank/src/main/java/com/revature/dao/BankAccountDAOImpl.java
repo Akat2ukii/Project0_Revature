@@ -47,7 +47,6 @@ public class BankAccountDAOImpl implements BankAccountDAO {
 			e.printStackTrace();
 		}
 		for (int i = 0; i < ba.size(); i++) {
-			System.out.println(ba.get(i));
 		}
 		BankAccount rawr = ba.get(0);
 		return rawr;
@@ -75,18 +74,20 @@ public class BankAccountDAOImpl implements BankAccountDAO {
 	}
 
 	@Override
-	public void updateBAccount(double balanceOfUser, int idOfUser) {
+	public void updateBAccount(double balanceOfUser, int bankAccId, int idOfUser) {
 		
 		try (Connection con = ConnectionUtil.getConnection()) {
 
 			String sql = "UPDATE BANK_ACCOUNT " + 
 						 "SET BALANCE = ? " + 
 						 "WHERE  " + 
-						 "BANK_ACCOUNT_ID = ? ";
+						 "BANK_ACCOUNT_ID = ? " +
+						 "AND USR_ID = ?";
 						
 			PreparedStatement pstmt = con.prepareStatement(sql);
 			pstmt.setDouble(1, balanceOfUser);
-			pstmt.setInt(2, idOfUser);
+			pstmt.setInt(2, bankAccId);
+			pstmt.setInt(3, idOfUser);
 			pstmt.executeUpdate();
 				
 					

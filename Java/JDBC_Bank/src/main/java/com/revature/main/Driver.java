@@ -1,12 +1,8 @@
 package com.revature.main;
 
-import java.io.IOException;
-
 import com.revature.beans.*;
-import java.sql.*;
 import java.util.*;
 import com.revature.dao.*;
-import com.revature.util.ConnectionUtil;
 
 public class Driver {
 	private static UserDAO ud = new UserDAOImpl();
@@ -23,10 +19,9 @@ public class Driver {
 		if (choosing2.toLowerCase().contentEquals("yes")) {
 			List<User> myList = ud.getUserByUserNamePassword(username, password);
 			User thisList = myList.get(0);
-			int myid = thisList.getId();
-			Scanner accountMake1 = new Scanner(System.in);
+			int myid = thisList.getId();	
 			System.out.println("Would you like a checking or savings account?");
-			String accountMake1C = accountMake1.nextLine();
+			String accountMake1C = choice2.nextLine();
 			int aType = 0;
 			if (accountMake1C.toLowerCase().contentEquals("checking")) {
 				aType = 1;
@@ -38,9 +33,8 @@ public class Driver {
 				System.out.println("Please type out 'savings' or 'checking'");
 				return;
 			}
-			Scanner accountMake2 = new Scanner(System.in);
 			System.out.println("How much would you like to deposit?");
-			String balanceS = accountMake2.nextLine();
+			String balanceS = choice2.nextLine();
 			int balance = Integer.parseInt(balanceS);
 			bad.createBAccount(myid, aType, balance);
 			System.out.println("Thank you, " + username + " we have sucessfully created your account.");
@@ -64,18 +58,14 @@ public class Driver {
 		System.out.println("Would you like to create a new user?");
 		String choosing = choice1.nextLine();
 		if (choosing.toLowerCase().contentEquals("yes")) {
-			Scanner fName = new Scanner(System.in);
 			System.out.println("What is your firstname?");
-			String name1 = fName.nextLine();
-			Scanner lName = new Scanner(System.in);
+			String name1 = choice1.nextLine();
 			System.out.println("What is your lastname?");
-			String name2 = lName.nextLine();
-			Scanner uName = new Scanner(System.in);
+			String name2 = choice1.nextLine();
 			System.out.println("What would you like your username to be?");
-			naming = uName.nextLine();
-			Scanner passW = new Scanner(System.in);
+			naming = choice1.nextLine();
 			System.out.println("What would you like your password to be?");
-			passing = passW.nextLine();
+			passing = choice1.nextLine();
 
 			ud.createUser(name1, name2, naming, passing, 1);
 		} 
@@ -90,6 +80,7 @@ public class Driver {
 			System.out.println("Please type in either 'yes' or 'no'. To go back, type in 'exit'");
 			createUser();
 		}
+		
 	}
 
 	private static void userLogin() {
@@ -98,12 +89,134 @@ public class Driver {
 		System.out.println("Please enter your username.");
 		String inUn = un.nextLine();
 		//
-		Scanner pass = new Scanner(System.in);
 		System.out.println("Please enter your password.");
-		String inPass = pass.nextLine();
+		String inPass = un.nextLine();
 		//
 		List<User> myList = ud.getUserByUserNamePassword(inUn, inPass);
 		thisUser = myList.get(0);
+	}
+	
+	private static void viewAccounts() {
+		List<BankAccount> accountList; /* = new ArrayList<BankAccount>(); */
+		accountList = ud.getAccountDetails(thisUser.getId());
+		BankAccount bankAccount;
+		for (int i = 0; i < accountList.size(); i++) {
+			bankAccount = ud.getAccountDetails(thisUser.getId()).get(i);
+			System.out.println(bankAccount);
+		}
+		choiceOne();
+	}
+	
+	private static void createAccount() {
+		Scanner accountMake1 = new Scanner(System.in);
+		System.out.println("Would you like a checking or savings account?");
+		String accountMake1C = accountMake1.nextLine();
+		int aType = 0;
+		if (accountMake1C.toLowerCase().contentEquals("checking")) {
+			aType = 1;
+		} else if (accountMake1C.toLowerCase().contentEquals("savings")) {
+			aType = 2;
+		} 
+		else {
+			System.out.println("Please type out 'savings' or 'checking'");
+			return;
+		}
+		System.out.println("How much would you like to deposit?");
+		String balanceS = accountMake1.nextLine();
+		int balance = Integer.parseInt(balanceS);
+		bad.createBAccount(thisUser.getId(), aType, balance);
+		System.out.println("Would you like to make another account?");
+		String going1 = accountMake1.nextLine();
+		if (going1.toLowerCase().contentEquals("yes")) {
+			createAccount();
+		}
+		else if (going1.toLowerCase().contentEquals("no")) {
+			choiceOne();
+		}
+		else {
+			return;
+		}
+		
+	}
+	
+	private static int idForAccount() {
+		Scanner verification = new Scanner(System.in);
+		System.out.println("What is your account number?");
+		String thisAccountId = verification.nextLine();
+		int returnId = Integer.parseInt(thisAccountId);
+		return returnId;
+	}
+	
+	private static void accountUpdate(int id) {	
+		userAccount = bad.getBAccountById(id);
+		if (userAccount.getUserId() != thisUser.getId()) {
+			System.out.println("I'm sorry, it looks like this account isn't tied to your account. Please try again, or type 'exit' to go back.");
+			idForAccount();
+		}
+		Scanner transactionType = new Scanner(System.in);
+		System.out.println("Would you like to deposit or withdraw?");
+		String transaction = transactionType.nextLine();
+		if (transaction.toLowerCase().contentEquals("withdraw") || transaction.toLowerCase().contentEquals("deposit")) {
+			Scanner amountT = new Scanner(System.in);
+			System.out.println("How much would you like to withdraw or deposit?");
+			String amount = amountT.nextLine();
+			double amountNum = Double.parseDouble(amount);
+
+
+
+			double changingValue = 0;
+			if (amountNum == 0) {
+				System.out.println("You cannot deposit or withdraw an amount of 0!");
+				accountUpdate(userAccount.getId());
+			} 
+			else if (transaction.toLowerCase().contentEquals("deposit") && amountNum > 0) {
+				changingValue = userAccount.getBalance() + amountNum;
+				bad.updateBAccount(changingValue, userAccount.getId(), thisUser.getId());
+				Scanner query1 = new Scanner(System.in);
+				System.out.println("Would you like to continue editing this account?");
+				String answer1 = query1.nextLine();
+				if (answer1.toLowerCase().contentEquals("yes")) {
+					accountUpdate(userAccount.getId());
+				}
+				else {
+					accountUpdate(userAccount.getId());
+				}
+			} 
+			else if (transaction.toLowerCase().contentEquals("withdraw") && amountNum > 0) {
+				changingValue = userAccount.getBalance() - amountNum;
+				
+				if (changingValue < 0) {
+					System.out.println("You cannot have an overdraft fee!");
+					System.out.println("You have " + userAccount.getBalance() + " remaining in your account.");
+					accountUpdate(userAccount.getId());
+				} 
+				
+				else {
+					bad.updateBAccount(changingValue, userAccount.getId(), thisUser.getId());
+					Scanner query2 = new Scanner(System.in);
+					System.out.println("Would you like to continue editing this account?");
+					String answer2 = query2.nextLine();
+					if (answer2.toLowerCase().contentEquals("yes")) {
+						accountUpdate(userAccount.getId());
+					}
+					else {
+						accountUpdate(userAccount.getId());
+					}
+				}
+
+			} 
+			else {
+				System.out.println("That was not a numerical value, please enter in a number.");
+			}
+		}
+		else if (transaction.toLowerCase().contentEquals("exit")) {
+			
+		}
+		
+		else {
+			System.out.println("Please either type in deposit or withdraw");
+			accountUpdate(userAccount.getId());
+		}
 	}
 
 	private static void choiceOne() {
@@ -132,74 +245,18 @@ public class Driver {
 			// cases
 			switch (choosingR1) {
 			case "v":
-				List<BankAccount> accountList; /* = new ArrayList<BankAccount>(); */
-				accountList = ud.getAccountDetails(thisUser.getId());
-				BankAccount bankAccount;
-				for (int i = 0; i < accountList.size(); i++) {
-					bankAccount = ud.getAccountDetails(thisUser.getId()).get(i);
-					System.out.println(bankAccount);
-				}
+				viewAccounts();
 				break;
 
 			case "c":
-				Scanner accountMake1 = new Scanner(System.in);
-				System.out.println("Would you like a checking or savings account?");
-				String accountMake1C = accountMake1.nextLine();
-				int aType = 0;
-				if (accountMake1C.toLowerCase().contentEquals("checking")) {
-					aType = 1;
-				} else if (accountMake1C.toLowerCase().contentEquals("savings")) {
-					aType = 2;
-				} else {
-					System.out.println("Please type out 'savings' or 'checking'");
-					return;
-				}
-				Scanner accountMake2 = new Scanner(System.in);
-				System.out.println("How much would you like to deposit?");
-				String balanceS = accountMake2.nextLine();
-				int balance = Integer.parseInt(balanceS);
-				bad.createBAccount(thisUser.getId(), aType, balance);
+				createAccount();
 				break;
 
 			case "d":
 
 				break;
 			case "f":
-				Scanner balanceEdit2 = new Scanner(System.in);
-				System.out.println("What is your account number?");
-				String balancing2 = balanceEdit2.nextLine();
-				int balancinging2 = Integer.parseInt(balancing2);
-				Scanner balanceEdit3 = new Scanner(System.in);
-				System.out.println("Would you like to deposit or withdraw?");
-				String balancing3 = balanceEdit3.nextLine();
-				Scanner balanceEdit4 = new Scanner(System.in);
-				System.out.println("How much would you like to withdraw or deposit?");
-				String balancing4 = balanceEdit4.nextLine();
-				int balancinging4 = Integer.parseInt(balancing4);
-
-				userAccount = bad.getBAccountById(balancinging2);
-				double changingValue = 0;
-				if (balancinging4 == 0) {
-					System.out.println("You cannot deposit or withdraw an amount of 0!");
-				} 
-				else if (balancing3.toLowerCase().contentEquals("deposit") && balancinging4 > 0) {
-					changingValue = userAccount.getBalance() + balancinging4;
-					bad.updateBAccount(changingValue, userAccount.getId());
-				} 
-				else if (balancing3.toLowerCase().contentEquals("withdraw") && balancinging4 > 0) {
-					changingValue = userAccount.getBalance() - balancinging4;
-					if (changingValue < 0) {
-						System.out.println("You cannot have an overdraft fee!");
-					} 
-					else {
-						bad.updateBAccount(changingValue, userAccount.getId());
-					}
-
-				} 
-				else {
-					System.out.println("That was not a numerical value, please enter in a number.");
-				}
-
+				accountUpdate(idForAccount());
 				break;
 			default:
 
