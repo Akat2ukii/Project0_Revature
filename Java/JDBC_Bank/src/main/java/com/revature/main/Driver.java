@@ -117,9 +117,9 @@ public class Driver {
 			
 	}
 	
-	userUpdate(accountId) {
+	//userUpdate(accountId) {
 		// stuff goes here
-	}
+	//}
 
 	
 	private static void userLogin() {
@@ -418,7 +418,7 @@ public class Driver {
 				*/
 					
 				case "u":
-					userUpdate(idForAccount());
+					//userUpdate(idForAccount());
 					break;
 					
 				default:

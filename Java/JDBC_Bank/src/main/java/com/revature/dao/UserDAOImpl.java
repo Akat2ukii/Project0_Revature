@@ -142,7 +142,7 @@ public class UserDAOImpl implements UserDAO{
 		
 		List<BankAccount> al = new ArrayList<>();
 		
-		try (Connection con = ConnectionUtil.getConnection()) {
+		try (Connection con = ConnectionUtil.getConnectionFromFile("config.properties")) {
 			String sql = 
 					
 					"SELECT * " +
@@ -159,7 +159,7 @@ public class UserDAOImpl implements UserDAO{
 				al.add(new BankAccount(accountId, id, accountTypeId, balance));
 			}
 				
-		}catch (SQLException e) {
+		}catch (SQLException | IOException e) {
 			e.printStackTrace();
 		}
 		return al; 
