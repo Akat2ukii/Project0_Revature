@@ -84,6 +84,11 @@ LEFT JOIN USR U
 ON 
     U.USR_ID = B.USR_ID; 
 
+-- view all accounts simpler versioin -- 
+
+SELECT * 
+FROM BANK_ACCOUNT; 
+
 -- logic to build transation table -- 
 CREATE OR REPLACE PROCEDURE  SP_GET_MAX_ACTIVITY(INDX OUT INTEGER) AS 
 BEGIN 
@@ -101,6 +106,7 @@ BEGIN
 END; 
 
 -- update activity fields --- 
+/*
 UPDATE ACTIVITY A
 SET 
 A.BANK_ACCOUNT_ID = ?
@@ -108,6 +114,7 @@ A.ACTIVITY_TYPE_ID = ?,
 A.TX_DESCRIPTION = ? 
 WHERE 
 A.ACTIVITY_ID = ? "; 
+*/
 
 --- add balance column to activity table -- 
 ALTER TABLE ACTIVITY
@@ -118,5 +125,14 @@ ADD  CURRENT_BALANCE DOUBLE PRECISION;
 
 UPDATE BANK_ACCOUNT  
 SET BALANCE = 10   
-WHERE BANK_ACCOUNT_ID = 5 
+WHERE BANK_ACCOUNT_ID = 5; 
 COMMIT; 
+/ 
+
+--pull up a user's transaction history -- 
+SELECT *
+FROM ACTIVITY 
+WHERE BANK_ACCOUNT_ID = 5; 
+
+-- logic to update an account -- 
+

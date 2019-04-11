@@ -58,7 +58,8 @@ public class Driver {
 			newUserCreateAccount(naming, passing);
 		}
 	}
-
+	
+		
 	private static void createUser() {
 		// choice1 - option for unregistered users to register as user
 		Scanner choice1 = new Scanner(System.in);
@@ -89,7 +90,33 @@ public class Driver {
 		}
 		
 	}
+	
+	private static void superUserCreateUser() {
+		// 
+		
+		Scanner choice1 = new Scanner(System.in);
+			
+		System.out.println("firstname: ");
+		String name1 = choice1.nextLine();
+		//
+		System.out.println("lastname: ");
+		String name2 = choice1.nextLine();
+		//
+		System.out.println("username: ");
+		naming = choice1.nextLine();
+		//
+		System.out.println("password: ");
+		passing = choice1.nextLine();
 
+		ud.createUser(name1, name2, naming, passing, 1);
+			
+	}
+	
+	userUpdate(accountId) {
+		// stuff goes here
+	}
+
+	
 	private static void userLogin() {
 		// user login process
 		Scanner un = new Scanner(System.in);
@@ -116,6 +143,17 @@ public class Driver {
 		BankAccount bankAccount;
 		for (int i = 0; i < accountList.size(); i++) {
 			bankAccount = ud.getAccountDetails(thisUser.getId()).get(i);
+			System.out.println(bankAccount);
+		}
+		choiceOne();
+	}
+	// -- pick up here 
+	private static void viewAllAccounts() {
+		List<BankAccount> accountsList; 
+		accountsList = ud.getAllAccountDetails();
+		BankAccount bankAccount; 
+		for (int i = 0; i < accountsList.size(); i++) {
+			bankAccount = ud.getAllAccountDetails().get(i);
 			System.out.println(bankAccount);
 		}
 		choiceOne();
@@ -288,7 +326,8 @@ public class Driver {
 			//
 			// options for registered users
 			Scanner choiceR1 = new Scanner(System.in);
-			System.out.println("\nPlease enter one of the following:\n " + "'v' to view your accounts,\n "
+			System.out.println("\nPlease enter one of the following:\n " 
+					+ "'v' to view your accounts,\n "
 					+ "'c' to create a new account,\n " + "'d' to delete an empty account, or\n "
 					+ "'f' to deposit or withdraw funds.");
 
@@ -296,12 +335,15 @@ public class Driver {
 
 			// cases
 			switch (choosingR1) {
+			
 			case "v":
 				viewAccounts();
 				break;
-      case "h":
-          userTransactions();
-        break;    
+				
+			case "h":
+				userTransactions();
+				break; 
+				
 			case "c":
 				createAccount();
 				break;
@@ -312,6 +354,7 @@ public class Driver {
 			case "f":
 				accountUpdate(idForAccount());
 				break;
+				
 			default:
 
 			}
@@ -321,9 +364,9 @@ public class Driver {
 		} 
 		else if (choosing0.toLowerCase().contentEquals("super")) {
 			//
-			// choices for super users
+			// choices for superusers
 			//
-			// user login process
+			// superuser login process
 			Scanner un = new Scanner(System.in);
 			System.out.println("Please enter your username.");
 			String inUn = un.nextLine();
@@ -338,10 +381,40 @@ public class Driver {
 			if (thisUser.getUserTypeId() == 2) {
 				//
 				Scanner choiceR1 = new Scanner(System.in);
-				System.out.println("\nWelcome superuser " + thisUser.getFirstName()
-						+ "\nPlease enter one of the following:\n'v' to view all accounts,\n'c' to create a new account,\n'd' to delete all user accounts, or\n'u' to update an account.");
+				System.out.println("\nWelcome superuser " + thisUser.getFirstName() +
+						"\nPlease enter one of the following:\n" + 
+						"'v' to view all accounts,\n" +
+						"'c' to create a new users account,\n"+
+						"'d' to delete all user accounts, or\n"+
+						"'u' to update an account.");
+				
 				String choosingR1 = choiceR1.nextLine();
-				// . . . more code here. . .
+				
+				// superuser cases
+				switch (choosingR1) {
+				
+				case "v":
+					viewAllAccounts();
+					break;
+					
+				case "c":
+					superUserCreateUser();
+					break;
+					
+				/*
+				case "d":
+
+					break;
+				*/
+					
+				case "u":
+					userUpdate(idForAccount());
+					break;
+					
+				default:
+			
+
+				}
 
 			} 
 			else {
