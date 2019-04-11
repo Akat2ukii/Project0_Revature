@@ -1,8 +1,13 @@
 package com.revature.main;
 
 import com.revature.beans.*;
+
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.*;
 import com.revature.dao.*;
+import com.revature.util.ConnectionUtil;
 
 public class Driver {
 	private static UserDAO ud = new UserDAOImpl();
@@ -364,18 +369,17 @@ public class Driver {
 
 	public static void main(String[] args) {
 		choiceOne();
+	try { 
+	  Connection con =
+	  ConnectionUtil.getConnectionFromFile("config.properties");
+	  System.out.println(con); 
+	  } 
+	catch (SQLException | IOException e) { 
+			  e.printStackTrace(); 
+	}
 
-//		  try { Connection con =
-//		  ConnectionUtil.getConnection();
-//		  System.out.println(con); } catch (SQLException e) { e.printStackTrace(); }
 
-//		  UserDAO ud = new UserDAOImpl();
-//		  List<User> userList = ud.getUser();
-//			
-//			for(User u : userList) {
-//				System.out.println(u);
-//			}
-//		  
+		  
 	}
 
 }

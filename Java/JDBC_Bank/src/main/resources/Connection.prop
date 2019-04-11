@@ -1,4 +1,0 @@
-url = "jdbc:oracle:thin:@projectzero.cf1xjil2bepa.us-east-2.rds.amazonaws.com:1521/orcl";
-username = "admin";
-pass = "p4ssw0rd";
-
