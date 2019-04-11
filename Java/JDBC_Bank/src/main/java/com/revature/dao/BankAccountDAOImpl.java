@@ -102,8 +102,28 @@ public class BankAccountDAOImpl implements BankAccountDAO {
 	}
 
 	@Override
-	public void deleteBAccount(User user) {
-		// TODO Auto-generated method stub
+	public void deleteBAccount(int userId, int bankAccountId) {
+
+		try (Connection con = ConnectionUtil.getConnectionFromFile("config.properties")) {
+
+			String sql = "DELETE FROM " + 
+						 "BANK_ACCOUNT " + 
+						 "WHERE " + 
+						 "BANK_ACCOUNT_ID = ? " +
+						 "AND USR_ID = ? " +
+						 "AND BALANCE = 0";
+
+						
+			PreparedStatement pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, bankAccountId);
+			pstmt.setInt(2, userId);
+			pstmt.executeUpdate();
+				
+					
+		} 
+			catch (SQLException | IOException e) {
+				e.printStackTrace();
+			}
 		
 	}
 

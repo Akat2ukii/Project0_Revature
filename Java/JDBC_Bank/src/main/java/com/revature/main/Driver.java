@@ -173,6 +173,14 @@ public class Driver {
 			return returnId;
 	}
 	
+	private static void deleteAccount() {
+		int thisIsThing = idForAccount();
+		System.out.println(thisIsThing);
+		System.out.println(thisUser.getId());
+		bad.deleteBAccount(thisIsThing, thisUser.getId());
+		validUserChoice ();
+		
+	}
 	private static void accountUpdate(int id) {	
 		userAccount = bad.getBAccountById(id);
 		if (userAccount.getUserId() != thisUser.getId()) {
@@ -298,7 +306,7 @@ public class Driver {
 			break;
 
 		case "d":
-
+			deleteAccount();
 			break;
 		case "f":
 			accountUpdate(idForAccount());
