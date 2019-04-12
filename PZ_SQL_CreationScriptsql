@@ -185,8 +185,9 @@ TX_DESCRIPTION VARCHAR2(100)
 ); 
 /
 */ 
--- trigger to commit deposit and withdrawals 
 
+-- trigger to commit deposit and withdrawals 
+/*
 CREATE OR REPLACE TRIGGER TR_UPDATE_BANK_ACCOUNT
 AFTER UPDATE ON BANK_ACCOUNT
 FOR EACH ROW 
@@ -194,3 +195,5 @@ BEGIN
    COMMIT;  
 END; 
 / 
+*/
+

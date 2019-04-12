@@ -102,29 +102,17 @@ public class BankAccountDAOImpl implements BankAccountDAO {
 	}
 
 	@Override
-	public void deleteBAccount(int userId, int bankAccountId) {
-
+	public void deleteBAccount(int bankAccountId) {
+		
 		try (Connection con = ConnectionUtil.getConnectionFromFile("config.properties")) {
-
-			String sql = "DELETE FROM " + 
-						 "BANK_ACCOUNT " + 
-						 "WHERE " + 
-						 "BANK_ACCOUNT_ID = ? " +
-						 "AND USR_ID = ? " +
-						 "AND BALANCE = 0";
-
-						
-			PreparedStatement pstmt = con.prepareStatement(sql);
-			pstmt.setInt(1, bankAccountId);
-			pstmt.setInt(2, userId);
-			pstmt.executeUpdate();
-				
-					
+			String sql = "{call SP_DELETE_BANK_ACCOUNT(?)}"; 
+			CallableStatement cs = con.prepareCall(sql);
+			cs.setInt(1, bankAccountId);
+			cs.execute();  		
 		} 
 			catch (SQLException | IOException e) {
 				e.printStackTrace();
 			}
-		
 	}
 
 	@Override
@@ -184,7 +172,8 @@ public class BankAccountDAOImpl implements BankAccountDAO {
 					
 					"SELECT * " +
 					"FROM ACTIVITY " +
-					"WHERE BANK_ACCOUNT_ID = ? "; 
+					"WHERE BANK_ACCOUNT_ID = ? " +
+					"ORDER BY ACTIVITY_ID DESC "; 
 			
 			PreparedStatement stmtGet = con.prepareStatement(sql);
 			stmtGet.setInt(1, bankAccountId);
