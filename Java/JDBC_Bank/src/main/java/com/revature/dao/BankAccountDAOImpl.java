@@ -1,5 +1,6 @@
 package com.revature.dao;
 
+import java.io.IOException;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 
@@ -27,7 +28,7 @@ public class BankAccountDAOImpl implements BankAccountDAO {
 		List<BankAccount> ba = new ArrayList<>();
 		// try-with-resources... resources will be closed at the end of the block
 		// works for all AutoCloseable resources
-		try (Connection con = ConnectionUtil.getConnection()) {
+		try (Connection con = ConnectionUtil.getConnectionFromFile("config.properties")) {
 			// write a join to unify Bear, Cave, and BearType into one ResultSet
 			// map the ResultSet onto a list of Bear objects
 			String sql = "SELECT * " + 
@@ -45,7 +46,7 @@ public class BankAccountDAOImpl implements BankAccountDAO {
 				ba.add(new BankAccount(bankAccId, userId, accountTypId, bankBalance));
 			}
 			
-		} catch (SQLException e) {
+		} catch (SQLException | IOException e) {
 			e.printStackTrace();
 		}
 		for (int i = 0; i < ba.size(); i++) {
@@ -57,7 +58,7 @@ public class BankAccountDAOImpl implements BankAccountDAO {
 	@Override
 	public void createBAccount(int UserId, int accountTypeID, double balance) {
 
-		try (Connection con = ConnectionUtil.getConnection()) {
+		try (Connection con = ConnectionUtil.getConnectionFromFile("config.properties")) {
 
 			String sql = "INSERT INTO BANK_ACCOUNT(USR_ID, ACCOUNT_TYPE_ID, BALANCE) " 
 						  + "VALUES (?, ?, ?)";
@@ -70,7 +71,7 @@ public class BankAccountDAOImpl implements BankAccountDAO {
 				
 					
 		} 
-			catch (SQLException e) {
+			catch (SQLException | IOException e) {
 				e.printStackTrace();
 			}
 	}
@@ -78,7 +79,7 @@ public class BankAccountDAOImpl implements BankAccountDAO {
 	@Override
 	public void updateBAccount(double balanceOfUser, int bankAccId, int idOfUser) {
 		
-		try (Connection con = ConnectionUtil.getConnection()) {
+		try (Connection con = ConnectionUtil.getConnectionFromFile("config.properties")) {
 
 			String sql = "UPDATE BANK_ACCOUNT " + 
 						 "SET BALANCE = ? " + 
@@ -95,29 +96,37 @@ public class BankAccountDAOImpl implements BankAccountDAO {
 				
 					
 		} 
-			catch (SQLException e) {
+			catch (SQLException | IOException e) {
 				e.printStackTrace();
 			}
 	}
 
 	@Override
-	public void deleteBAccount(User user) {
-		// TODO Auto-generated method stub
+	public void deleteBAccount(int bankAccountId) {
 		
+		try (Connection con = ConnectionUtil.getConnectionFromFile("config.properties")) {
+			String sql = "{call SP_DELETE_BANK_ACCOUNT(?)}"; 
+			CallableStatement cs = con.prepareCall(sql);
+			cs.setInt(1, bankAccountId);
+			cs.execute();  		
+		} 
+			catch (SQLException | IOException e) {
+				e.printStackTrace();
+			}
 	}
 
 	@Override
 	public int getMaxActivity() {
 		int maxIndx = 0; 
 		
-		try (Connection con = ConnectionUtil.getConnection()) {
+		try (Connection con = ConnectionUtil.getConnectionFromFile("config.properties")) {
 			String sql = "{call SP_GET_MAX_ACTIVITY(?)}"; 			
 			CallableStatement cs = con.prepareCall(sql);
 			cs.registerOutParameter(1, java.sql.Types.INTEGER); 
 			cs.execute(); 
 			maxIndx =cs.getInt(1); 		
 		} 
-			catch (SQLException e) {
+			catch (SQLException | IOException e) {
 				e.printStackTrace();
 			}
 		return maxIndx;
@@ -126,7 +135,7 @@ public class BankAccountDAOImpl implements BankAccountDAO {
 	@Override
 	public void updateActivity(int bankAccountId, int activityIndx, int activityTypeId, String txDescription,
 			double currentBalance) {
-		try (Connection con = ConnectionUtil.getConnection()) {
+		try (Connection con = ConnectionUtil.getConnectionFromFile("config.properties")) {
 			String sql = 
 					"UPDATE ACTIVITY A " +
 					"SET " +
@@ -146,7 +155,7 @@ public class BankAccountDAOImpl implements BankAccountDAO {
 			pstmt.setInt(5, activityIndx);
 			pstmt.executeUpdate();		
 		} 
-			catch (SQLException e) {
+			catch (SQLException | IOException e) {
 				e.printStackTrace();
 			}	
 		
@@ -158,12 +167,13 @@ public class BankAccountDAOImpl implements BankAccountDAO {
 	public List<Activity> getActivity(int bankAccountId) {
 		List<Activity> activityList = new ArrayList<>();
 		
-		try (Connection con = ConnectionUtil.getConnection()) {
+		try (Connection con = ConnectionUtil.getConnectionFromFile("config.properties")) {
 			String sql = 
 					
 					"SELECT * " +
 					"FROM ACTIVITY " +
-					"WHERE BANK_ACCOUNT_ID = ? "; 
+					"WHERE BANK_ACCOUNT_ID = ? " +
+					"ORDER BY ACTIVITY_ID DESC "; 
 			
 			PreparedStatement stmtGet = con.prepareStatement(sql);
 			stmtGet.setInt(1, bankAccountId);
@@ -179,7 +189,7 @@ public class BankAccountDAOImpl implements BankAccountDAO {
 				activityList.add(new Activity(activityId, bAccountId, actTypeId, txDate,txDescribe, currentBalance));
 			}
 				
-		}catch (SQLException e) {
+		}catch (SQLException | IOException e) {
 			e.printStackTrace();
 		}
 		return activityList; 

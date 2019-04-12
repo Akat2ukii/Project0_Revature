@@ -13,7 +13,7 @@ public interface BankAccountDAO {
 	public BankAccount getBAccountById(int id);
 	public void createBAccount (int UserId, int accountTypeID, double balance);
 	public void updateBAccount(double balanceOfUser,int bankAccId, int idOfUser);
-	public void deleteBAccount(User user);
+	public void deleteBAccount(int bankAccountId);
 	
 	//methods for adding transactions to activity table and user tx history 
 	public int getMaxActivity(); 
